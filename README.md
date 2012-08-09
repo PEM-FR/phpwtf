@@ -7,8 +7,10 @@ The concept is simple, when you review some code, if you think :
  - What The Fuck is that shit? 
  - Who The Fuck made this? 
 
-You simply add a // @WTF as a comment before the code that needs fixing.
-PHPWTF will parse the code and note every @WTF it finds, and report them with file and line number.
+You simply add a @wtf_start and @wtf_stop as a comment before and after the code that needs fixing.
+PHPWTF will parse the code and report the wtfs it finds.
 Ideally we could even make it usable by Jenkins with a nice graph and code exploration :)
 
 Accepting contributions :)
+
+The Logo and favicon are courtesy of David Smith and under MIT Licence of the phpwtf project.
