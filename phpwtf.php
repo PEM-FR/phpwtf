@@ -161,19 +161,23 @@ function checkInput($args)
 
 function getFiles($path, &$files, $recursive = false)
 {
-    if ($recursive) {
-        $lookup = substr($path, strrpos($path, "/"));
-        $dirPath = substr($path, 0, strrpos($path, "/") + 1) . "*";
-        $dirs = glob($dirPath, GLOB_ONLYDIR);
-        foreach ($dirs as $dir) {
-            if ($dir . "/*" != $dirPath) {
-                getFiles($dir . $lookup, $files, $recursive);
+    // we check if several paths have been given
+    $paths = explode(",", $path);
+    foreach ($paths as $curPath){
+        if ($recursive) {
+            $lookup = substr($curPath, strrpos($curPath, "/"));
+            $dirPath = substr($curPath, 0, strrpos($curPath, "/") + 1) . "*";
+            $dirs = glob($dirPath, GLOB_ONLYDIR);
+            foreach ($dirs as $dir) {
+                if ($dir . "/*" != $dirPath) {
+                    getFiles($dir . $lookup, $files, $recursive);
+                }
             }
         }
-    }
-    $result = glob($path);
-    if ($result !== false) {
-        $files = array_merge($files, $result);
+        $result = glob($curPath);
+        if ($result !== false) {
+            $files = array_merge($files, $result);
+        }
     }
 }
 

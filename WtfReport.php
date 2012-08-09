@@ -174,19 +174,20 @@ class WtfReport
         $htmlTemplate = file_get_contents($this->_htmlTemplate);
 
         foreach ($wtfsList as $wtf) {
-            $file     = $this->_getSplInfo($wtf->getFile());
+            $file = $this->_getSplInfo($wtf->getFile());
 
-            // if you are php >= 5.3.6 you can uncomment this lines
-            // $fileName   = $file->getBasename('.' . $file->getExtension());
-            // otherwise we use the old way
-            $fileName = $file->getFilename();
-            $fileName = substr($fileName, 0, strrpos($fileName, '.'));
-            $fileName .= '.html';
+            // we keep the extension in case of the user having several files
+            // with the same name : example.php, example.js, example.java
+            // we also need to have a unique id in case the user having files
+            // with identical names but in different folders
+            $fileName = substr(sha1(time() . '_' . $file->getFilename()), 0, 7);
+            $fileName = $fileName . '_' . $file->getFilename() . '.html';
             $this->_createFile(
                 $this->_outputPath . $fileName, $wtf->toHtml($htmlTemplate)
             );
-            $indexOfFiles[$this->_outputPath . $fileName] = count(
-                $wtf->getWtfs()
+            $indexOfFiles[$file->getRealPath()] = array(
+                'reportFile' => $this->_outputPath . $fileName,
+                'wtfsNb' => count($wtf->getWtfs())
             );
         }
 
