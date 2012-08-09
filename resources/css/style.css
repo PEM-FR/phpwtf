@@ -1,3 +1,7 @@
+body{
+	background-color: #FEFEFE;
+}
+
 h1{
 	text-align: center;
 }
@@ -65,3 +69,26 @@ div.wtfSnippets div.snippet{
 	width: 730px;
 	padding-left : 10px;
 }
+
+table.wtfFileList{
+	width : 100%;
+}
+
+table.wtfFileList tr:nth-child(even) {
+	background: #FDFDFD;
+}
+
+table.wtfFileList tr:nth-child(odd) {
+	background: #FAFAFA;
+}
+
+table.wtfFileList td,
+table.wtfFileList th
+{
+	border : 1px solid #000;
+}
+
+table.wtfFileList th{
+	background-color: none;
+}
+

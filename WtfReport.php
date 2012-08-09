@@ -29,7 +29,7 @@ class WtfReport
      * The html template to use for the html files
      * @var string
      */
-    private $_htmlTemplate;
+    private $_htmlTemplates;
 
     /**
      * Constructor with parameter injection
@@ -54,7 +54,7 @@ class WtfReport
         }
 
         // TODO: make it overridable later
-        $this->_htmlTemplate = './resources/templates/html/wtfFile.html';
+        $this->_htmlTemplates = './resources/templates/html/';
     }
 
     /**
@@ -147,7 +147,7 @@ class WtfReport
         $wtfsList = $wtfs->getWtfs();
         $indexOfFiles = array();
 
-        if (!file_exists($this->_htmlTemplate)) {
+        if (!file_exists($this->_htmlTemplates)) {
             throw new Exception('No html template file found!');
         }
 
@@ -171,8 +171,15 @@ class WtfReport
             $this->_outputPath . 'resources/css'
         );
 
-        $htmlTemplate = file_get_contents($this->_htmlTemplate);
+        $wtfFileTemplate = file_get_contents(
+            $this->_htmlTemplates . 'wtfFile.html'
+        );
 
+        $indexTemplate = file_get_contents(
+            $this->_htmlTemplates . 'index.html'
+        );
+
+        $totalWtfs = 0;
         foreach ($wtfsList as $wtf) {
             $file = $this->_getSplInfo($wtf->getFile());
 
@@ -183,16 +190,36 @@ class WtfReport
             $fileName = substr(sha1(time() . '_' . $file->getFilename()), 0, 7);
             $fileName = $fileName . '_' . $file->getFilename() . '.html';
             $this->_createFile(
-                $this->_outputPath . $fileName, $wtf->toHtml($htmlTemplate)
+                $this->_outputPath . $fileName, $wtf->toHtml($wtfFileTemplate)
             );
+            $nbWtfs = count($wtf->getWtfs());
             $indexOfFiles[$file->getRealPath()] = array(
-                'reportFile' => $this->_outputPath . $fileName,
-                'wtfsNb' => count($wtf->getWtfs())
+                'reportFile' => './' . $fileName,
+                'wtfsNb' => $nbWtfs
             );
+            $totalWtfs += $nbWtfs;
         }
 
         // do something with the output
         // TODO: generate index.html
+        $indexTemplate = str_replace(
+            array('${lastModified}', '${wtfsNb}'),
+            array(date('Y-m-d H:i:s'), $totalWtfs),
+            $indexTemplate
+        );
+        $list = '<table class="wtfFileList"><thead><tr>' .
+            '<th>File</th><th>Nb. Wtfs</th>' .
+            '</tr></thead><tbody>';
+        foreach ($indexOfFiles as $realPath => $wtf_report) {
+            $list .= '<tr><td>' .
+                '<a href="' . $wtf_report['reportFile'] . '" ' .
+                'title="Click for more details">' . $realPath . '</a></td>' .
+                '<td>nb. wtfs : ' . $wtf_report['wtfsNb'] . '</td></tr>';
+        }
+        $list .= '</tbody><tfoot></tfoot></table>';
+
+        $indexTemplate = str_replace('${wtf_reports}', $list, $indexTemplate);
+        $this->_createFile($this->_outputPath . 'index.html', $indexTemplate);
     }
 
     /**

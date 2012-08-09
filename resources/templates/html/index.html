@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+	<head>
+		<title>PHPWtf - Index of reports</title>
+		<meta name="Author" content="PEM"/>
+		<meta name="Description" content="Index of the phpwtf file reports"/>
+		<meta name="Keywords" content="wtf, phpwtf, code, review"/>
+		<meta name="Generator" content="phpwtf"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<link rel="icon" type="image/ico" href="./resources/images/favicon.ico" />
+		<link rel="stylesheet" type="text/css" href="./resources/css/style.css" />
+	</head>
+	<body>
+		<nav>
+			<a href="about.html" title="Check about.html" class="logo">
+				<img src="./resources/images/wtf_concept_128.png" alt="Logo"/>
+			</a>
+			<a href="#" title="Back to Index.html">Index</a>
+		</nav>
+		<h1>Wtfs report - This tool is not a stick to beat programmers!</h1>
+		<div class="overview">
+			<div class="lastModified"><span class="label">Last modified : </span>${lastModified}</div>
+			<div class="wtfsNb"><span class="label">Number of Wtfs : </span>${wtfsNb}</div>
+		</div>
+		<div class="wtfSnippets">
+			<h2>Liste des fichiers incriminés : </h2>
+			${wtf_reports}
+			</div>
+	</body>
+</html>
