@@ -92,24 +92,24 @@ class WtfReport
             $this->_wtfs = $wtfs;
         }
 
-        switch ($this->_format) {
-            case 'html' :
+        // in case of output format combination like xml+stats
+        $formats = explode('+', $this->_format);
+
+        foreach ($formats as $format) {
+            if ('html' == $format) {
                 $this->_createHtmlReport();
                 // html also generates the stats
-            case 'stats' :
-                $output = $this->_createStats();
-                // do something with the output
-                break;
-            default : //xml
+                $this->_createStats();
+            } elseif ('stats' == $format) {
+                $this->_createStats();
+            } else {
                 $output = $this->_toXml();
                 $this->_createFile(
                     $this->_outputPath . time() . '.xml',
                     $output
                 );
+            }
         }
-
-        // TODO: handle file generation, folder permissions etc
-
     }
 
     /**

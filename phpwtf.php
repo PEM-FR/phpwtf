@@ -94,18 +94,18 @@ function checkInput($args)
             ? $args[($needHelp - 1)]
             : $args[0];
         $pathHelp = "\t\033[1;32m" . '--path=' . "\033[1;36m" . 'string' .
-            "\033[0;37m\t" .
-            'the relative path where to look for files, ex: /path/to/*.php' .
-            "\n";
+            "\033[0;37m\t\t" .
+            'the relative paths where to look for files, ex: "./path/*.php,' .
+            './path/*.js" Notice the , as separator' . "\n";
         $recHelp = "\t\033[1;32m" . '--recursive' . "\033[1;36m" .
-            "\033[0;37m\t" .
+            "\033[0;37m\t\t" .
             'do you want the parser to loop in recursive directories' . "\n";
-        $formatHelp = "\t\033[1;32m" . '--format' . "\033[1;36m" .
-            "\033[0;37m\t" .
-            'accepts xml (default), html and stats. Allow combination using +, ' .
-            'ie : html+stats' . "\n";
-        $outputHelp = "\t\033[1;32m" . '--output-path' . "\033[1;36m" .
-            "\033[0;37m\t" .
+        $formatHelp = "\t\033[1;32m" . '--format=' . "\033[1;36m" . 'string' .
+            "\033[0;37m\t\t" . 'accepts xml (default), html and stats. ' .
+            'Allow combination using +, ie : xml+stats. ' .
+            'Note that html already generates stats too' . "\n";
+        $outputHelp = "\t\033[1;32m" . '--output-path=' . "\033[1;36m" .
+            'string' . "\033[0;37m\t" .
             'Path for reports generation, defaults to ./reports/ ' . "\n";
         switch ($cmd) {
             case '--path':
@@ -122,7 +122,8 @@ function checkInput($args)
                 break;
             default :
                 echo 'phpwtf Command list :' . "\n";
-                echo $pathHelp . $recHelp . "\033[0;37m\n";
+                echo $pathHelp . $recHelp . $formatHelp . $outputHelp .
+                    "\033[0;37m\n";
         }
         return null;
     }
