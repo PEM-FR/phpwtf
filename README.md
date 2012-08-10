@@ -23,7 +23,6 @@ phpwtf Command list :
  -       --output-path=string    Path for reports generation, defaults to ./reports/
 
 
-
 Accepting contributions :)
 
 The Logo and favicon are courtesy of David Smith and under MIT Licence of the phpwtf project.
