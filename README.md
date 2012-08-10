@@ -17,10 +17,10 @@ php phpwtf.php --path="./examples/*.php,./examples/*.js,./examples/*.html" --rec
 of course phptwtf script supports help command
 
 phpwtf Command list : 
- -       --path=string           the relative paths where to look for files, ex: "./path/*.php,./path/*.js" Notice the , as separator
- -       --recursive             do you want the parser to loop in recursive directories
- -       --format=string         accepts xml (default), html and stats. Allow combination using +, ie : xml+stats. Note that html already generates stats too
- -       --output-path=string    Path for reports generation, defaults to ./reports/
+ -       --path=string           "the relative paths where to look for files, ex: "./path/*.php,./path/*.js" Notice the , as separator"
+ -       --recursive             "do you want the parser to loop in recursive directories"
+ -       --format=string         "accepts xml (default), html and stats. Allow combination using +, ie : xml+stats. Note that html already generates stats too"
+ -       --output-path=string    "Path for reports generation, defaults to ./reports/"
 
 
 Accepting contributions :)
