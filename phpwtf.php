@@ -40,7 +40,6 @@ if (null != $commands) {
 
     // foreach file we should check if it is an amd one, if so,
     // get the dependency list, and check the code.
-/*	$xml = '<?xml version="1.0" encoding="UTF-8"?><phpwtf version="0.1">'; */
     foreach ($files as $file) {
 		// Get a file into an array.  In this example we'll go through HTTP to get
 		// the HTML source of a URL.
@@ -65,14 +64,12 @@ if (null != $commands) {
 			}
 
 			if(($startFound && !$endFound) || (!$startFound && $endFound)){
-				$pbm = str_replace('"', '\"', $line);
-				$errorMsg .= $pbm;
+				$errorMsg .= $line;
 				$found = true;
 				if ($endFound) {
 				    $wtfsInFile[$lineNb] = array(
                         'severity' => 'error', 'snippet' => $errorMsg
                     );
-//					$errors = '<error line="' . $lineNb . '" severity="error" message="' . $errorMsg . '"/>';
 					$endFound = false;
 					$errorMsg = '';
 				}
@@ -82,9 +79,7 @@ if (null != $commands) {
 		    $wtfs->addWtf(
                 new Wtf(array('file' => $file, 'wtfs' => $wtfsInFile))
             );
-//			$xml .= '<file name="' . $file . '">' . $errors . '</file>';
 			$found = false;
-//			$errors = '';
 		}
     }
     $report->generateReport($wtfs);
@@ -179,22 +174,6 @@ function getFiles($path, &$files, $recursive = false)
             $files = array_merge($files, $result);
         }
     }
-}
-
-function generateStats($results)
-{
-
-}
-
-
-function generateSvg($result)
-{
-
-}
-
-function generateHtml($result)
-{
-
 }
 
 ?>

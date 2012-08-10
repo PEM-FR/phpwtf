@@ -94,7 +94,7 @@ class Wtf
             foreach ($wtfs as $line => $wtf) {
                 $xml .= '<error line="' . $line . '" ' .
                     'severity="' . $wtf['severity'] . '" ' .
-                    'message="' . $wtf['snippet'] . '"/>';
+                    'message="' . htmlentities($wtf['snippet']) . '"/>';
             }
         }
         $xml .= '</file>';

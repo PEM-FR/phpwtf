@@ -187,7 +187,9 @@ class WtfReport
             // with the same name : example.php, example.js, example.java
             // we also need to have a unique id in case the user having files
             // with identical names but in different folders
-            $fileName = substr(sha1(time() . '_' . $file->getFilename()), 0, 7);
+            $fileName = substr(
+                sha1(microtime() . '_' . $file->getFilename()), 0, 9
+            );
             $fileName = $fileName . '_' . $file->getFilename() . '.html';
             $this->_createFile(
                 $this->_outputPath . $fileName, $wtf->toHtml($wtfFileTemplate)
@@ -200,8 +202,6 @@ class WtfReport
             $totalWtfs += $nbWtfs;
         }
 
-        // do something with the output
-        // TODO: generate index.html
         $indexTemplate = str_replace(
             array('${lastModified}', '${wtfsNb}'),
             array(date('Y-m-d H:i:s'), $totalWtfs),
