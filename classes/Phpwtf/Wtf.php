@@ -5,7 +5,12 @@
  * @license MIT
  */
 
-class Phpwtf\Wtf
+namespace Phpwtf;
+
+/**
+ * This class is in charge of handling Wtfs found in code
+ */
+class Wtf
 {
     /**
      * The path of the file
@@ -41,7 +46,7 @@ class Phpwtf\Wtf
         if (!empty($wtfArray['file'])) {
             $this->_file = $wtfArray['file'];
         } else {
-            throw new Exception('No file path specified !');
+            throw new \Exception('No file path specified !');
         }
         if (!empty($wtfArray['wtfs'])) {
             $this->_wtfs = $wtfArray['wtfs'];

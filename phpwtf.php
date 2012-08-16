@@ -95,7 +95,7 @@ if (null != $commands) {
     $elapsedReporter = number_format(($end - $intermediateTime), 5);
     $elapsedTotal = number_format(($end - $start), 5);
 
-    echo "\nParsed : " . count($files) . ' files in ' . $elapsedTotal . ' s' .
+    echo "\nParsed " . count($files) . ' files in ' . $elapsedTotal . ' s' .
         "\n-----------------------------------------------------------------" .
         "\n" . 'Parsing time : ' . $elapsedParser . ' s' .
         "\n" . 'Report writing time : ' . $elapsedReporter . ' s' .

@@ -5,7 +5,12 @@
  * @license MIT
  */
 
-class Phpwtf\WtfReport
+namespace Phpwtf;
+
+/**
+ * This is the class in charge of creating reports
+ */
+class WtfReport
 {
     /**
      * The format to output (xml, html, stats)
@@ -86,7 +91,7 @@ class Phpwtf\WtfReport
             if (null != $this->_wtfs) {
                 $wtfs = $this->_wtfs;
             } else {
-                throw new Exception('No Wtf list to use !');
+                throw new \Exception('No Wtf list to use !');
             }
         } else {
             $this->_wtfs = $wtfs;
@@ -142,13 +147,13 @@ class Phpwtf\WtfReport
     {
         $wtfs = $this->_wtfs;
         if (empty($wtfs)) {
-            throw new Exception('No wtfs provided!');
+            throw new \Exception('No wtfs provided!');
         }
         $wtfsList = $wtfs->getWtfs();
         $indexOfFiles = array();
 
         if (!file_exists($this->_resources . 'templates/html/')) {
-            throw new Exception(
+            throw new \Exception(
                 'No html template folder found in path ' .
                 $this->_resources . 'templates/html/' . '!' .
                 "\n" . 'Current path : ' . getcwd()
@@ -242,7 +247,7 @@ class Phpwtf\WtfReport
         $result = file_put_contents($outputFile , $output , FILE_APPEND);
 
         if (false === $result) {
-            throw new Exception('Could not write into file ' . $outputFile);
+            throw new \Exception('Could not write into file ' . $outputFile);
         }
     }
 
@@ -253,7 +258,7 @@ class Phpwtf\WtfReport
      */
     private function _getSplInfo($filePath)
     {
-        return new SplFileInfo($filePath);
+        return new \SplFileInfo($filePath);
     }
 
     /**
@@ -267,7 +272,7 @@ class Phpwtf\WtfReport
             mkdir($dest, 0755);
         }
 
-        $iterator = new DirectoryIterator($src);
+        $iterator = new \DirectoryIterator($src);
         foreach ($iterator as $fileinfo) {
             if ($fileinfo->isFile()) {
                 // only copy if file does not exist

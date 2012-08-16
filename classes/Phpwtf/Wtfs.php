@@ -5,7 +5,13 @@
  * @license MIT
  */
 
-class Phpwtf\Wtfs
+namespace Phpwtf;
+
+/**
+ * This is a collection class
+ * // TODO: check if ArrayCollection from Doctrine Common could work
+ */
+class Wtfs
 {
     /**
      * A list of Wtf objects

@@ -16,7 +16,7 @@
 		"issues": "https://github.com/PEM-FR/phpwtf/issues"
 	},
 	"autoload": {
-		"psr-0": {"Phpwtf": "classes/php/"}
+		"psr-0": {"Phpwtf": "classes/"}
 	},
 	"require": {
 		"symfony/console": "dev-master"
