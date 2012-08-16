@@ -14,15 +14,16 @@ require_once('./classes/php/WtfReport.php');
 require 'vendor/autoload.php';
 
 // Args should be written like that :
-// php phpwtf.php --path="some/path/*.php,some/path/*.js" --recursive > result.xml
-// --path parameters given to a path function
-// --recursive if not set then false
-// --format by default xml, can be set to html, html+stats, xml+stats
+// php phpwtf.php -p="path/*.php,path/*.js" -r -f=xml+stats -o="./reports/"
+// --paths -p parameters given to a path function
+// --recursive -r if not set then false
+// --format -f by default xml, can be set to html, html+stats, xml+stats
 //        the xml is a simple xml with files, and errors
 //        the html is a set of pages per file, with the errors reported + stats
-//        stats will just ouput statistics about the nb of WTF, it's evolution, etc
+//        stats will just ouput statistics about the nb of WTF, etc
 //        finally you can combine output format by using +
-
+// --output-path -o defaults to ./reports/
+//        the directory where you want your reports to be written
 $args = $_SERVER["argv"];
 
 $commands = checkInput($args);
