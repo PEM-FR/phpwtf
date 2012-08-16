@@ -19,6 +19,7 @@
 		"psr-0": {"Phpwtf": "classes/"}
 	},
 	"require": {
+		"php": ">=5.3.3",
 		"symfony/console": "dev-master"
 	}
 }
