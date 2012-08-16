@@ -1,16 +1,19 @@
 {
 	"name": "phpwtf/phpwtf",
 	"description": "This tool allows for silent human code reviews on -any language- source file, with reports usable in jenkins for example.",
-	"author": "Pierre-Emmanuel Manteau <pe.manteau@gmail.com",
+	"authors": [
+		{
+			"name": "Pierre-Emmanuel Manteau",
+			"email": "pe.manteau@gmail.com",
+			"role": "Developer"
+		}
+	],
 	"keywords": ["code", "review", "reporting", "monitoring", "quality", "standards"],
 	"homepage": "https://github.com/PEM-FR/phpwtf",
 	"license": "MIT",
-    "support": {
-        "irc": "irc://irc.freenode.org/phpwtf",
-        "issues": "https://github.com/PEM-FR/phpwtf/issues"
-    },
-	"dependencies": {
-		"php": ">=5.3.3"
+	"support": {
+		"irc": "irc://irc.freenode.org/phpwtf",
+		"issues": "https://github.com/PEM-FR/phpwtf/issues"
 	},
 	"autoload": {
 		"psr-0": {"Phpwtf": "classes/php/"}
