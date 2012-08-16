@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-class Wtf
+class Phpwtf\Wtf
 {
     /**
      * The path of the file

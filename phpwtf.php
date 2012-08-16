@@ -5,9 +5,13 @@
  * @license MIT
  */
 
-require_once('./Wtf.php');
-require_once('./Wtfs.php');
-require_once('./WtfReport.php');
+/*
+require_once('./classes/php/Wtf.php');
+require_once('./classes/php/Wtfs.php');
+require_once('./classes/php/WtfReport.php');
+*/
+
+require 'vendor/autoload.php';
 
 // Args should be written like that :
 // php phpwtf.php --path="some/path/*.php,some/path/*.js" --recursive > result.xml
@@ -31,15 +35,16 @@ if (null != $commands) {
 	$errors = '';
     getFiles($commands['--path'], $files, $commands['--recursive']);
 
-    $wtfs = new Wtfs();
+    $wtfs = new Phpwtf\Wtfs();
     $params = array(
         'outputPath' => $commands['--output-path'],
         'format' => $commands['--format'],
     );
-    $report = new WtfReport($params);
+    $report = new Phpwtf\WtfReport($params);
 
     // foreach file we should check if it is an amd one, if so,
     // get the dependency list, and check the code.
+    $start = microtime(true);
     foreach ($files as $file) {
 		// Get a file into an array.  In this example we'll go through HTTP to get
 		// the HTML source of a URL.
@@ -77,12 +82,25 @@ if (null != $commands) {
 		}
 		if ($found) {
 		    $wtfs->addWtf(
-                new Wtf(array('file' => $file, 'wtfs' => $wtfsInFile))
+                new Phpwtf\Wtf(array('file' => $file, 'wtfs' => $wtfsInFile))
             );
 			$found = false;
 		}
     }
+    $intermediateTime = microtime(true);
     $report->generateReport($wtfs);
+    $end = microtime(true);
+
+    $elapsedParser = number_format(($intermediateTime - $start), 5);
+    $elapsedReporter = number_format(($end - $intermediateTime), 5);
+    $elapsedTotal = number_format(($end - $start), 5);
+
+    echo "\nParsed : " . count($files) . ' files in ' . $elapsedTotal . ' s' .
+        "\n-----------------------------------------------------------------" .
+        "\n" . 'Parsing time : ' . $elapsedParser . ' s' .
+        "\n" . 'Report writing time : ' . $elapsedReporter . ' s' .
+        "\n" . 'Total time : ' . $elapsedTotal .
+        "\n-----------------------------------------------------------------\n";
 }
 
 function checkInput($args)

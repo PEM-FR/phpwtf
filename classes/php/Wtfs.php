@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-class Wtfs
+class Phpwtf\Wtfs
 {
     /**
      * A list of Wtf objects

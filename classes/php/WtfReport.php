@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-class WtfReport
+class Phpwtf\WtfReport
 {
     /**
      * The format to output (xml, html, stats)
@@ -26,10 +26,10 @@ class WtfReport
     private $_outputPath;
 
     /**
-     * The html template to use for the html files
+     * The resources to use for the html files
      * @var string
      */
-    private $_htmlTemplates;
+    private $_resources;
 
     /**
      * Constructor with parameter injection
@@ -54,7 +54,7 @@ class WtfReport
         }
 
         // TODO: make it overridable later
-        $this->_htmlTemplates = './resources/templates/html/';
+        $this->_resources = './resources/';
     }
 
     /**
@@ -147,8 +147,12 @@ class WtfReport
         $wtfsList = $wtfs->getWtfs();
         $indexOfFiles = array();
 
-        if (!file_exists($this->_htmlTemplates)) {
-            throw new Exception('No html template file found!');
+        if (!file_exists($this->_resources . 'templates/html/')) {
+            throw new Exception(
+                'No html template folder found in path ' .
+                $this->_resources . 'templates/html/' . '!' .
+                "\n" . 'Current path : ' . getcwd()
+            );
         }
 
         // we copy, if necessary, the resources to report folder
@@ -157,26 +161,26 @@ class WtfReport
         }
         if (!is_file($this->_outputPath . 'about.html')) {
             copy(
-                './resources/about.html', $this->_outputPath . 'about.html'
+                $this->_resources . 'about.html',
+                $this->_outputPath . 'about.html'
             );
         }
         // syncing dirs
         $this->_rsyncDirs(
-            __DIR__ . '/resources/images',
+            $this->_resources . 'images',
             $this->_outputPath . 'resources/images'
         );
 
         $this->_rsyncDirs(
-            __DIR__ . '/resources/css',
-            $this->_outputPath . 'resources/css'
+            $this->_resources . 'css', $this->_outputPath . 'resources/css'
         );
 
         $wtfFileTemplate = file_get_contents(
-            $this->_htmlTemplates . 'wtfFile.html'
+            $this->_resources . 'templates/html/wtfFile.html'
         );
 
         $indexTemplate = file_get_contents(
-            $this->_htmlTemplates . 'index.html'
+            $this->_resources . 'templates/html/index.html'
         );
 
         $totalWtfs = 0;
