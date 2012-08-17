@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Review extends Command
+class ReviewCommand extends Command
 {
     protected function configure()
     {
@@ -20,8 +20,8 @@ class Review extends Command
             )
             ->addOption(
                 'paths',
-                '-p',
-                InputOption::OPTIONAL,
+                null,
+                InputOption::VALUE_REQUIRED,
                 'Paths to scan for sources, ' .
                 'ie: "/some/path/*.php,/some/other/path/*.js"' .
                 "\n" . 'Default to "/"',
@@ -29,16 +29,16 @@ class Review extends Command
             )
             ->addOption(
                 'output-path',
-                '-o',
-                InputOption::OPTIONAL,
+                null,
+                InputOption::VALUE_REQUIRED,
                 'The directory where the reports should be written to.' .
                 'Default to "./reports/"',
                 './reports/'
             )
             ->addOption(
                 'format',
-                '-f',
-                InputOption::OPTIONAL,
+                null,
+                InputOption::VALUE_REQUIRED,
                 'The format of the reports, ie: xml, html, stats, xml+stats.' .
                 'Note that html already includes the stats. Default to xml',
                 'xml'
@@ -47,15 +47,13 @@ class Review extends Command
                 'recursive',
                 '-r',
                 InputOption::VALUE_NONE,
-                'If set, the paths will be scanned recursively.',
-                false
+                'If set, the paths will be scanned recursively.'
             )
             ->addOption(
                 'bench',
                 '-b',
                 InputOption::VALUE_NONE,
-                'If set, times will be displayed when task has been completed.',
-                false
+                'If set, times will be displayed when task has been completed.'
             )
         ;
     }
@@ -134,7 +132,7 @@ class Review extends Command
         $output->writeln('<info>Work Done!</info>');
 
         if ($input->getOption('bench')) {
-            $this->_displayBench($start, $middle, $end, $output);
+            $this->_displayBench(count($files), $start, $middle, $end, $output);
         }
 
     }
@@ -152,7 +150,7 @@ class Review extends Command
                 $dirs = glob($dirPath, GLOB_ONLYDIR);
                 foreach ($dirs as $dir) {
                     if ($dir . "/*" != $dirPath) {
-                        getFiles($dir . $lookup, $files, $recursive);
+                        $this->_getFiles($dir . $lookup, $files, $recursive);
                     }
                 }
             }
@@ -164,7 +162,7 @@ class Review extends Command
     }
 
     private function _displayBench(
-        $start, $middle, $end, OutputInterface $output
+        $nbFiles, $start, $middle, $end, OutputInterface $output
     )
     {
         $elapsedParser = number_format(($middle - $start), 5);
@@ -172,7 +170,7 @@ class Review extends Command
         $elapsedTotal = number_format(($end - $start), 5);
 
         $output->writeln(
-            'Parsed ' . count($files) . ' files in ' . $elapsedTotal . ' s'
+            'Parsed ' . $nbFiles . ' files in ' . $elapsedTotal . ' s'
         );
 
         $output->writeln(
