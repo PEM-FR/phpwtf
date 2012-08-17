@@ -22,5 +22,5 @@
 		"php": ">=5.3.3",
 		"symfony/console": "dev-master"
 	},
-	"bin": ["bin/phpwtf"]
+	"bin": ["vendor/bin/phpwtf"]
 }

@@ -5,7 +5,8 @@
  * @license MIT
  */
 
-require 'vendor/autoload.php';
+// we are supposed to be in vendor/bin/
+require '../autoload.php';
 
 // Args can be written like that :
 // php phpwtf.php review --paths="path/*.php,path/*.js" --format=html -r -b
