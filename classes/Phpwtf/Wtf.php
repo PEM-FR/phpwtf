@@ -72,8 +72,27 @@ class Wtf
      */
     public function getFile()
     {
+        return $this->_file;
+    }
+
+    /**
+     * This function returns an SplInfo object for a given file
+     * @param string $filePath
+     * @return SplFileInfo
+     */
+    private function _getSplInfo($filePath)
+    {
+        return new \SplFileInfo($filePath);
+    }
+
+    /**
+     * Returns the file path without the phpwtf folder path
+     * @return string
+     */
+    public function getReadableFileName()
+    {
         if (null != $this->_rootPath) {
-            return substr($this->_file, (strlen($this->_rootPath)+1));
+            return $this->_getSplInfo($this->getFile())->getRealPath();
         }
         return $this->_file;
     }
@@ -108,7 +127,7 @@ class Wtf
     public function toXml()
     {
         $wtfs = $this->getWtfs();
-        $xml = '<file name="' . $this->getFile() . '">';
+        $xml = '<file name="' . $this->getReadableFileName() . '">';
         if (!empty($wtfs)){
             foreach ($wtfs as $line => $wtf) {
                 $xml .= '<error line="' . $line . '" ' .
@@ -132,10 +151,10 @@ class Wtf
         // replace vars by values, then return new updated html string
         $html = str_replace(
             array(
-                '${fileName}', '${wtfsNb}', '${phpwtf_path}', '${lastModified}'
+                '${fileName}', '${wtfsNb}', '${lastModified}'
             ),
             array(
-                $this->getFile(), count($wtfs), __DIR__, date('Y-m-d H:i:s')
+                $this->getReadableFileName(), count($wtfs), date('Y-m-d H:i:s')
             ),
             $html
         );

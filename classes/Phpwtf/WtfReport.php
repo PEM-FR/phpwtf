@@ -53,6 +53,14 @@ class WtfReport
      */
     public function __construct($params)
     {
+        // TODO: make it overridable later
+        $this->_wtfRoot = __DIR__ . '/../../';
+        $this->_resources = $this->_wtfRoot . 'resources/';
+        $this->_rootPath = $this->_wtfRoot;
+        if (stripos($this->_rootPath, 'phpwtf/phpwtf') !== false) {
+            $this->_rootPath .= '../../';
+        }
+
         if (!empty($params['outputPath'])) {
             $this->setOuputPath($params['outputPath']);
         } else {
@@ -69,13 +77,6 @@ class WtfReport
             $this->_wtfs = null;
         }
 
-        // TODO: make it overridable later
-        $this->_wtfRoot = __DIR__ . '/../../';
-        $this->_resources = $this->_wtfRoot . 'resources/';
-        $this->_rootPath = $this->_wtfRoot;
-        if (stripos($this->_rootPath, 'phpwtf/phpwtf') !== false) {
-            $this->_rootPath .= '../../';
-        }
     }
 
     /**
