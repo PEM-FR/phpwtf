@@ -28,6 +28,12 @@ class Wtf
     private $_wtfs;
 
     /**
+     * The root path can be either vendor if installed with composer
+     * or the root folder of phpwtf if installed manually
+     */
+    private $_rootPath;
+
+    /**
      * Constructor with data injection
      * @param $wtfArray An array of data usable by the object
      *         array(
@@ -53,6 +59,11 @@ class Wtf
         } else {
             $this->_wtfs = array();
         }
+
+        $this->_rootPath = __DIR__ . '/../../';
+        if (stripos($this->_rootPath, 'phpwtf/phpwtf') !== false) {
+            $this->_rootPath .= '../../';
+        }
     }
 
     /**
@@ -61,6 +72,9 @@ class Wtf
      */
     public function getFile()
     {
+        if (null != $this->_rootPath) {
+            return substr($this->_file, (strlen($this->_rootPath)+1));
+        }
         return $this->_file;
     }
 

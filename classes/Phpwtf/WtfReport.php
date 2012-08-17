@@ -43,6 +43,11 @@ class WtfReport
     private $_rootPath;
 
     /**
+     * This is the path to the root of the phpwtf folder
+     */
+    private $_wtfRoot;
+
+    /**
      * Constructor with parameter injection
      * @param array $params
      */
@@ -65,8 +70,9 @@ class WtfReport
         }
 
         // TODO: make it overridable later
-        $this->_resources = __DIR__ . '/../../resources/';
-        $this->_rootPath = __DIR__ . '/../../';
+        $this->_wtfRoot = __DIR__ . '/../../';
+        $this->_resources = $this->_wtfRoot . 'resources/';
+        $this->_rootPath = $this->_wtfRoot;
         if (stripos($this->_rootPath, 'phpwtf/phpwtf') !== false) {
             $this->_rootPath .= '../../';
         }
@@ -90,6 +96,8 @@ class WtfReport
             || './.' == $rootPath) {
             // the user has input a relative path, we start from vendor
             $outputPath = $this->_rootPath . $outputPath;
+        } else {
+            $outputPath = $this->_wtfRoot . $outputPath;
         }
 
         if (!is_dir($outputPath)) {
