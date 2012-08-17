@@ -59,7 +59,7 @@ class WtfReport
         }
 
         // TODO: make it overridable later
-        $this->_resources = './resources/';
+        $this->_resources = __DIR__ . '/../../resources/';
     }
 
     /**
