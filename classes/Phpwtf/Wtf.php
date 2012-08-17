@@ -150,9 +150,7 @@ class Wtf
         $wtfs = $this->getWtfs();
         // replace vars by values, then return new updated html string
         $html = str_replace(
-            array(
-                '${fileName}', '${wtfsNb}', '${lastModified}'
-            ),
+            array('${fileName}', '${wtfsNb}', '${lastModified}'),
             array(
                 $this->getReadableFileName(), count($wtfs), date('Y-m-d H:i:s')
             ),
