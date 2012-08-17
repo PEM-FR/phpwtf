@@ -10,6 +10,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ReviewCommand extends Command
 {
+    private $_rootPath;
+
     protected function configure()
     {
         $this
@@ -24,7 +26,9 @@ class ReviewCommand extends Command
                 InputOption::VALUE_REQUIRED,
                 'Paths to scan for sources, ' .
                 'ie: "/some/path/*.php,/some/other/path/*.js"' .
-                "\n" . 'Default to "/"',
+                "\n" . 'Default to "/". Becareful, relative path are resolved ' .
+                'from either vendor folder or root folder if you ' .
+                'have not installed phpwtf with composer.',
                 '/'
             )
             ->addOption(
@@ -56,6 +60,12 @@ class ReviewCommand extends Command
                 'If set, times will be displayed when task has been completed.'
             )
         ;
+
+        $this->_rootPath = __DIR__ . '/../../../';
+        if (stripos($this->_rootPath, 'phpwtf/phpwtf') !== false) {
+            $this->_rootPath .= '../../';
+        }
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -141,7 +151,16 @@ class ReviewCommand extends Command
     {
         // we check if several paths have been given
         $paths = explode(",", $path);
+
         foreach ($paths as $curPath){
+            $rootPath = substr($curPath, 0, 3);
+            // is the path given relative?
+            if ('../' == $rootPath
+                || '/..' == $rootPath
+                || './.' == $rootPath) {
+                // the user has input a relative path, we start from vendor
+                $curPath = $this->_rootPath . $curPath;
+            }
             if ($recursive) {
                 $lookup = substr($curPath, strrpos($curPath, "/"));
                 $dirPath = substr(

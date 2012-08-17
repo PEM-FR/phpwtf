@@ -37,6 +37,12 @@ class WtfReport
     private $_resources;
 
     /**
+     * The root path can be either vendor if installed with composer
+     * or the root folder of phpwtf if installed manually
+     */
+    private $_rootPath;
+
+    /**
      * Constructor with parameter injection
      * @param array $params
      */
@@ -60,7 +66,10 @@ class WtfReport
 
         // TODO: make it overridable later
         $this->_resources = __DIR__ . '/../../resources/';
-        echo "\n" . 'resource : ' . $this->_resources;
+        $this->_rootPath = __DIR__ . '/../../';
+        if (stripos($this->_rootPath, 'phpwtf/phpwtf') !== false) {
+            $this->_rootPath .= '../../';
+        }
     }
 
     /**
@@ -72,6 +81,15 @@ class WtfReport
         // we make sure the path ends with a /
         if (strrpos($outputPath, '/') != (strlen($outputPath) - 1 )) {
             $outputPath .= '/';
+        }
+
+        $rootPath = substr($outputPath, 0, 3);
+        // is the path given relative?
+        if ('../' == $rootPath
+            || '/..' == $rootPath
+            || './.' == $rootPath) {
+            // the user has input a relative path, we start from vendor
+            $outputPath = $this->_rootPath . $outputPath;
         }
 
         if (!is_dir($outputPath)) {
