@@ -5,8 +5,9 @@
  * @license MIT
  */
 
-// we are supposed to be in vendor/bin/
-require '../autoload.php';
+// Otherwise people will have sad pandas
+(@include_once __DIR__ . '/../vendor/autoload.php') || 
+	@include_once __DIR__ . '/../../../autoload.php';
 
 // Args can be written like that :
 // php phpwtf.php review --paths="path/*.php,path/*.js" --format=html -r -b
