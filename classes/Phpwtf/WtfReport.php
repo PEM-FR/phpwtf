@@ -207,19 +207,15 @@ class WtfReport
     private function _writeStats()
     {
         // Djson stands for dataJson
-        // we'll be using file_put_contents so we don'tneed to worry if the
-        // file_exists :)
-        $djsonFile = $this->_outputPath . '/djson';
-        $djson = file_get_contents($this->_outputPath . '/djson');
-        // if file exists
-        if (false !== $djson) {
-            // then we decode it as an associative array
-            $djson = json_decode($djson, true);
-        } else {
-            // otherwise we init a new array
-            $djson = array();
+        $djson = array();
+        $djsonFile = $this->_outputPath . 'djson';
+        if (file_exists($djsonFile)) {
+            $data = file_get_contents($djsonFile);
+            if (false !== $data) {
+                // then we decode it as an associative array
+                $djson = json_decode($data, true);
+            }
         }
-
         $djson[time()] = $this->_stats;
         $json = json_encode($djson);
         if (false === $json) {
@@ -247,8 +243,6 @@ class WtfReport
         if (empty($wtfs)) {
             throw new \Exception('No wtfs provided!');
         }
-
-        $stats = $this->_stats;
 
         $wtfsList = $wtfs->getWtfs();
         $indexOfFiles = array();
@@ -310,12 +304,12 @@ class WtfReport
                 'reportFile' => './' . $fileName,
                 'wtfsNb' => $nbWtfs
             );
-            $stats['wtfs'][$file->getRealPath()] = $nbWtfs;
+            $this->_stats['wtfs'][$file->getRealPath()] = $nbWtfs;
 
             $totalWtfs += $nbWtfs;
         }
 
-        $stats['total'] = $totalWtfs;
+        $this->_stats['total'] = $totalWtfs;
 
         $indexTemplate = str_replace(
             array('${lastModified}', '${wtfsNb}'),

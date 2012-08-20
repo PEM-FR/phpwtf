@@ -25,6 +25,9 @@ class Wtfs
      */
     public function getWtfs()
     {
+        if (null == $this->_wtfs) {
+            $this->_wtfs = array();
+        }
         return $this->_wtfs;
     }
 
