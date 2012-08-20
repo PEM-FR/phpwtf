@@ -24,11 +24,10 @@ div.overview{
 }
 
 div#trend{
-	width: 200px;
-	height: 150px;
+	width: 300px;
+	height: 200px;
 	overflow: hidden;
 	margin: auto;
-	background-color: #DFDFDF;
 }
 
 div.lastModified{
@@ -57,7 +56,7 @@ div.wtfSnippets > div{
 	float: left;
 }
 
-div.wtfSnippets div.line, 
+div.wtfSnippets div.line,
 div.wtfSnippets div.snippet
 {
 	float: left;
@@ -98,5 +97,23 @@ table.wtfFileList th
 
 table.wtfFileList th{
 	background-color: none;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: steelblue;
+  stroke: steelblue;
+  stroke-width: 1px;
+}
+
+.dot {
+  fill: white;
+  stroke: steelblue;
+  stroke-width: 1px;
 }
 

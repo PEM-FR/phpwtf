@@ -1,0 +1,47 @@
+[{
+	"time" : 1345489475,
+	"total": 0,
+	"wtfs": []
+}, {
+	"time" : 1345488475,
+	"total": 12,
+	"wtfs": [{
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/some/sub/dir/test1.php" : 2
+		}, {
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/test1.php" : 2
+		}, {
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/some/omg.js" : 6
+		}, {
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/test1.html" : 2
+		}]
+}, {
+	"time" : 1345487475,
+	"total": 8,
+	"wtfs": [{
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/some/sub/dir/test1.php" : 2
+		}, {
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/test1.php" : 2
+		}, {
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/some/omg.js" : 2
+		}, {
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/test1.html" : 2
+		}]
+}, {
+	"time" : 1345486475,
+	"total": 3,
+	"wtfs": [{
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/some/omg.js" : 2
+		}, {
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/test1.html" : 1
+		}]
+}, {
+	"time" : 1345485475,
+	"total": 1,
+	"wtfs": [{
+			"/vol/sys/shared/htdocs/devs-v5/pemanteau/tools/examples/test1.html" : 1
+		}]
+}, {
+	"time" : 1345484475,
+	"total": 0,
+	"wtfs": []
+}]
