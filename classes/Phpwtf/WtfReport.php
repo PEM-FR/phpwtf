@@ -216,7 +216,8 @@ class WtfReport
                 $djson = json_decode($data, true);
             }
         }
-        $djson[time()] = $this->_stats;
+        $this->_stats['time'] = time();
+        $djson[] = $this->_stats;
         $json = json_encode($djson);
         if (false === $json) {
             throw new \Exception(
@@ -274,6 +275,10 @@ class WtfReport
 
         $this->_rsyncDirs(
             $this->_resources . 'css', $this->_outputPath . 'resources/css'
+        );
+
+        $this->_rsyncDirs(
+            $this->_resources . 'js', $this->_outputPath . 'resources/js'
         );
 
         $wtfFileTemplate = file_get_contents(

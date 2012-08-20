@@ -9,6 +9,9 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<link rel="icon" type="image/ico" href="./resources/images/favicon.ico" />
 		<link rel="stylesheet" type="text/css" href="./resources/css/style.css" />
+		<!--  temporary solution until there is a composer version of d3 -->
+		<script type="text/javascript" src="http://d3js.org/d3.v2.js" defer="defer"></script>
+		<script type="text/javascript" src="./resources/js/d3Charts.js" defer="defer"></script>
 	</head>
 	<body>
 		<nav>
@@ -21,6 +24,7 @@
 		<div class="overview">
 			<div class="lastModified"><span class="label">Last modified : </span>${lastModified}</div>
 			<div class="wtfsNb"><span class="label">Number of Wtfs : </span>${wtfsNb}</div>
+			<div id="trend"></div>
 		</div>
 		<div class="wtfSnippets">
 			<h2>Snippets : </h2>
