@@ -39,13 +39,22 @@ class WtfReport
     /**
      * The root path can be either vendor if installed with composer
      * or the root folder of phpwtf if installed manually
+     * @var string
      */
     private $_rootPath;
 
     /**
      * This is the path to the root of the phpwtf folder
+     * @var string
      */
     private $_wtfRoot;
+
+    /**
+     * This array will be used to store stats so that we don't have to loop
+     * once again through all Wtfs, except if empty.
+     * @var array
+     */
+    private $_stats;
 
     /**
      * Constructor with parameter injection
@@ -53,6 +62,8 @@ class WtfReport
      */
     public function __construct($params)
     {
+        $this->_stats = array('total' => 0, 'wtfs' => array());
+
         // TODO: make it overridable later
         $this->_wtfRoot = __DIR__ . '/../../';
         $this->_resources = $this->_wtfRoot . 'resources/';
@@ -160,12 +171,71 @@ class WtfReport
     }
 
     /**
-     * Used to generate the svg charts
+     * Used to generate the charts data in json
      * @return void
      */
     private function _createStats()
     {
-        // TODO: generate svg charts
+        if (!empty($this->_stats)) {
+            $this->_writeStats();
+            // we had stats, we wrote them, no need to go any further.
+            return;
+        }
+        // there were no stats, this can happen, only if "stats" was the
+        // only output format in the command line
+        $wtfs = $this->_wtfs;
+        if (empty($wtfs)) {
+            throw new \Exception('No wtfs provided!');
+        }
+        $wtfsList = $wtfs->getWtfs();
+        $totalWtfs = 0;
+        foreach ($wtfsList as $wtf) {
+            $file = $this->_getSplInfo($wtf->getFile());
+            $nbWtfs = count($wtf->getWtfs());
+            $this->_stats['wtfs'][$file->getRealPath()] = $nbWtfs;
+            $totalWtfs += $nbWtfs;
+        }
+        $this->_stats['total'] = $totalWtfs;
+        // now we write the stats
+        $this->_writeStats();
+    }
+
+    /**
+     * This function handle the file writing of stats
+     * @throws \Exception
+     */
+    private function _writeStats()
+    {
+        // Djson stands for dataJson
+        // we'll be using file_put_contents so we don'tneed to worry if the
+        // file_exists :)
+        $djsonFile = $this->_outputPath . '/djson';
+        $djson = file_get_contents($this->_outputPath . '/djson');
+        // if file exists
+        if (false !== $djson) {
+            // then we decode it as an associative array
+            $djson = json_decode($djson, true);
+        } else {
+            // otherwise we init a new array
+            $djson = array();
+        }
+
+        $djson[time()] = $this->_stats;
+        $json = json_encode($djson);
+        if (false === $json) {
+            throw new \Exception(
+                'An error occured during json encoding of data : <pre>' .
+                print_r($djson, true) . '</pre>'
+            );
+        }
+        $result = file_put_contents($djsonFile, $json);
+        if (false === $result) {
+            throw new \Exception(
+                'Could not write json ' . "\n" .
+                '<pre>' . print_r($json, true) . '</pre> ' . "\n" .
+                'to file ' . $djsonFile
+            );
+        }
     }
 
     /**
@@ -177,9 +247,13 @@ class WtfReport
         if (empty($wtfs)) {
             throw new \Exception('No wtfs provided!');
         }
+
+        $stats = $this->_stats;
+
         $wtfsList = $wtfs->getWtfs();
         $indexOfFiles = array();
 
+        // check for dir existence
         if (!file_exists($this->_resources . 'templates/html/')) {
             throw new \Exception(
                 'No html template folder found in path ' .
@@ -236,8 +310,12 @@ class WtfReport
                 'reportFile' => './' . $fileName,
                 'wtfsNb' => $nbWtfs
             );
+            $stats['wtfs'][$file->getRealPath()] = $nbWtfs;
+
             $totalWtfs += $nbWtfs;
         }
+
+        $stats['total'] = $totalWtfs;
 
         $indexTemplate = str_replace(
             array('${lastModified}', '${wtfsNb}'),
