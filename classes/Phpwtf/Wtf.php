@@ -161,7 +161,7 @@ class Wtf
         $snippets = '';
         foreach ($wtfs as $line => $wtf) {
             $snippets .= '<div>' .
-                '<div class="line"><span class="label">Line : </span>' .
+                '<div class="lineNb"><span class="label">Line : </span>' .
                 $line . '</div><div class="snippet">' .
                 '<code>' . nl2br($wtf['snippet']) . '</code>' .
                 '</div></div>';

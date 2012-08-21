@@ -54,7 +54,6 @@ d3.json('./djson', function(data){
 	}else{
 		sel = d3.select("#trend-file");
 		file = d3.select("title").html();
-		console.log("file : ", file);
 		svg = sel.append("svg");
 		
 		value_scale = d3.scale.linear()

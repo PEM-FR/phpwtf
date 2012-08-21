@@ -44,7 +44,7 @@ div.lastModified{
 span.label{
 	background-color: #DADADA;
 	display: inline-block;
-	width : 200px;
+	width : 130px;
 	margin-right : 5px;
 	padding-right : 5px;
 	border-right : 1px solid #000;
@@ -54,16 +54,18 @@ div.wtfSnippets{
 	width : 1024px;
 	margin: auto;
 	padding: 10px;
-	padding-top: 0px;
+	padding-top: 20px;
+	padding-bottom: 50px;
 }
 
 div.wtfSnippets > div{
 	border : 1px solid #000;
 	margin-top : 10px;
-	float: left;
+	display : table;
+	margin: auto auto 20px;
 }
 
-div.wtfSnippets div.line,
+div.wtfSnippets div.lineNb,
 div.wtfSnippets div.snippet
 {
 	float: left;
@@ -71,16 +73,16 @@ div.wtfSnippets div.snippet
 	left : 0px;
 }
 
-div.wtfSnippets div.line{
+div.wtfSnippets div.lineNb{
 	border-bottom : 1px solid #000;
 	vartical-align: top;
 	padding-right : 5px;
-	width: 200px;
+	width: 196px;
 }
 
 div.wtfSnippets div.snippet{
 	border-left : 1px solid #000;
-	width: 730px;
+	width		: 810px;
 	padding-left : 10px;
 }
 
