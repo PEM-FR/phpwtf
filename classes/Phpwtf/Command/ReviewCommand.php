@@ -126,6 +126,16 @@ class ReviewCommand extends Command
                     }
                 }
             }
+            if ($startFound) {
+                // we have a problem here, it means that someone has put a
+                // wtf_start without a wtf_stop.
+                // Rather than reporting the whole file, we will trigger an
+                // exception.
+                $startFound = false;
+                throw new \Exception(
+                    'A @wtf_start has been found without a matching @wtf_stop!'
+                );
+            }
             if ($found) {
                 $wtfs->addWtf(
                     new \Phpwtf\Wtf(
