@@ -18,16 +18,23 @@ nav a.logo{
 
 div.overview{
 	border : 1px solid #000;
-	width : 333px;
+	width : 1024px;
 	margin : auto;
 	margin-top : 45px;
 }
 
-div#trend{
-	width: 300px;
-	height: 200px;
+div#trend-main,
+div#trend-file{
+	width: 1000px;
+	height: 300px;
 	overflow: hidden;
 	margin: auto;
+}
+
+div#trend-main svg,
+div#trend-file svg{
+	width: 1000px;
+	height: 300px;
 }
 
 div.lastModified{
@@ -37,7 +44,7 @@ div.lastModified{
 span.label{
 	background-color: #DADADA;
 	display: inline-block;
-	width : 150px;
+	width : 200px;
 	margin-right : 5px;
 	padding-right : 5px;
 	border-right : 1px solid #000;

@@ -192,7 +192,9 @@ class WtfReport
         foreach ($wtfsList as $wtf) {
             $file = $this->_getSplInfo($wtf->getFile());
             $nbWtfs = count($wtf->getWtfs());
-            $this->_stats['wtfs'][] = array($file->getRealPath() => $nbWtfs);
+            $this->_stats['wtfs'][] = array(
+                'file' => $file->getRealPath(), 'total' => $nbWtfs
+            );
             $totalWtfs += $nbWtfs;
         }
         $this->_stats['total'] = $totalWtfs;
@@ -309,7 +311,9 @@ class WtfReport
                 'reportFile' => './' . $fileName,
                 'wtfsNb' => $nbWtfs
             );
-            $this->_stats['wtfs'][] = array($file->getRealPath() => $nbWtfs);
+            $this->_stats['wtfs'][] = array(
+                'file' => $file->getRealPath(), 'total' => $nbWtfs
+            );
 
             $totalWtfs += $nbWtfs;
         }

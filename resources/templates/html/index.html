@@ -11,7 +11,6 @@
 		<link rel="stylesheet" type="text/css" href="./resources/css/style.css" />
 		<!--  temporary solution until there is a composer version of d3 -->
 		<script type="text/javascript" src="http://d3js.org/d3.v2.js" defer="defer"></script>
-		<script type="text/javascript" src="http://d3js.org/d3.time.js" defer="defer"></script>
 		<script type="text/javascript" src="./resources/js/d3Charts.js" defer="defer"></script>
 	</head>
 	<body>
@@ -24,8 +23,8 @@
 		<h1>Wtfs report - This tool is not a stick to beat programmers!</h1>
 		<div class="overview">
 			<div class="lastModified"><span class="label">Last modified : </span>${lastModified}</div>
-			<div class="wtfsNb"><span class="label">Number of Wtfs : </span>${wtfsNb}</div>
-			<div id="trend"></div>
+			<div class="lastModified"><span class="label">Number of Wtfs : </span>${wtfsNb}</div>
+			<div id="trend-main" class="wtfsNb"></div>
 		</div>
 		<div class="wtfSnippets">
 			<h2>List of the faulty files : </h2>
