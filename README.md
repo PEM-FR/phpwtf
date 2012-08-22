@@ -21,10 +21,10 @@ Installation
 /!\ THIS TOOL IS TO BE INSTALLED WITH COMPOSER : https://github.com/composer/composer
 
 Basically you need to (if you already know how to use composer you can skip this part) :
-1. Create a directory where you want to put the tool
-2. Download the composer.phar
-3. Create a composer.json file like : 
 
+1.	Create a directory where you want to put the tool
+2.	Download the composer.phar
+3.	Create a composer.json file like : 
 	{
 		"name": "nameOfYourProject",
 		"minimum-stability": "dev",
@@ -33,8 +33,7 @@ Basically you need to (if you already know how to use composer you can skip this
 			"phpwtf/phpwtf": "dev-master"
 		}
 	}
-
-4. Then in the command line run : php composer.phar install
+4.	Then in the command line run : php composer.phar install
 	
 Run it!
 -------
@@ -48,7 +47,7 @@ You only have to delete the content of this directory the first time.
 	php phpwtf.php --paths="./examples/*.php,./examples/*.js,./examples/*.html" -r --format=html --output-path="./reports/"
 
 
-of course phptwtf script supports help command
+Of course phptwtf script supports help command
 
 Args can be written like that :
 	php phpwtf.php review --paths="path/*.php,path/*.js" --format=html -r -b
