@@ -1,6 +1,9 @@
 phpwtf
 ======
 
+What is it?
+-----------
+
 You know Pdepend, PHPMD? well it's a WTF counter for PHP, usefull for codereviews
 The concept is simple, when you review some code, if you think :
  - What The Fuck? 
@@ -11,7 +14,30 @@ You simply add a @wtf_start and @wtf_stop as a comment before and after the code
 PHPWTF will parse the code and report the wtfs it finds.
 Ideally we could even make it usable by Jenkins with a nice graph and code exploration :)
 
+
+Installation
+------------
+
 /!\ THIS TOOL IS TO BE INSTALLED WITH COMPOSER : https://github.com/composer/composer
+
+Basically you need to (if you already know how to use composer you can skip this part) :
+1. Create a directory where you want to put the tool
+2. Download the composer.phar
+3. Create a composer.json file like : 
+
+	{
+		"name": "nameOfYourProject",
+		"minimum-stability": "dev",
+		"require": {
+			"php": ">=5.3.3",
+			"phpwtf/phpwtf": "dev-master"
+		}
+	}
+
+4. Then in the command line run : php composer.phar install
+	
+Run it!
+-------
 
 To run the example, you just need to :
 
@@ -45,6 +71,9 @@ This list of options is non-exhaustive and can change anytime. You can use the h
 
 	--bench    -b   To display timings.
 
+
+What more?
+----------
 
 Accepting contributions :)
 
