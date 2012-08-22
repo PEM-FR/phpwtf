@@ -11,7 +11,7 @@ You simply add a @wtf_start and @wtf_stop as a comment before and after the code
 PHPWTF will parse the code and report the wtfs it finds.
 Ideally we could even make it usable by Jenkins with a nice graph and code exploration :)
 
-/!\ THIS TOOL IS TO BE INSTALLED WITH COMPOSER
+/!\ THIS TOOL IS TO BE INSTALLED WITH COMPOSER : https://github.com/composer/composer
 
 To run the example, you just need to :
 
