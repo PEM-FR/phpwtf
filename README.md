@@ -43,14 +43,14 @@ To run the example, you just need to :
 1. Clean the reports directory (since composer does not retain permissions on files yet, they will not be overriden as they would normally be by the script). 
 You only have to delete the content of this directory the first time.
 
-2. Go to where your the script is then type in your console :
-	php phpwtf.php --paths="./examples/*.php,./examples/*.js,./examples/*.html" -r --format=html --output-path="./reports/"
+2. Go to where you installed phpwtf, in the root folder then type in your console :
+	php vendor/bin/phpwtf review --paths="./examples/*.php,./examples/*.js,./examples/*.html" -r --format=html --output-path="./reports/"
 
 
 Of course phptwtf script supports help command
 
 Args can be written like that :
-	php phpwtf.php review --paths="path/*.php,path/*.js" --format=html -r -b
+	php vendor/bin/phpwtf.php review --paths="path/*.php,path/*.js" --format=html --output-path="./reports/" -r -b
 
 This list of options is non-exhaustive and can change anytime. You can use the help or list command to have more up to date information at any time. Also note that since they are all options, they can be put in *any* order.
  
