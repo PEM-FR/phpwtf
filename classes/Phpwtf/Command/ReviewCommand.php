@@ -176,16 +176,20 @@ class ReviewCommand extends Command
                 $dirPath = substr(
                     $curPath, 0, strrpos($curPath, "/") + 1
                 ) . "*";
-                $dirs = glob($dirPath, GLOB_ONLYDIR);
+                $dirs = glob($dirPath, GLOB_ONLYDIR|GLOB_ERR);
                 foreach ($dirs as $dir) {
                     if ($dir . "/*" != $dirPath) {
                         $this->_getFiles($dir . $lookup, $files, $recursive);
                     }
                 }
             }
-            $result = glob($curPath);
+            $result = glob($curPath, GLOB_ERR);
             if ($result !== false) {
                 $files = array_merge($files, $result);
+            } else {
+                throw new \Exception(
+                    'Error wrong path : please fix the path(s) and try again.'
+                );
             }
         }
     }
