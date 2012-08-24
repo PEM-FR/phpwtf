@@ -47,7 +47,7 @@ To run the example, you just need to :
 Of course phptwtf script supports help command
 
 Args can be written like that :<br/>
-	<pre><code>php vendor/bin/phpwtf.php review --paths="path/*.php,path/*.js" --format=html --output-path="./reports/" -r -b</code></pre>
+	<pre><code>php vendor/bin/phpwtf.php review --paths="path/*.php,path/*.js" --format=html --output-path="path/to/reports/" -r -b</code></pre>
 
 This list of options is non-exhaustive and can change anytime. You can use the help or list command to have more up to date information at any time. Also note that since they are all options, they can be put in *any* order.
  
