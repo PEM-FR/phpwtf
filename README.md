@@ -25,14 +25,14 @@ Basically you need to (<strong>if you already know how to use composer you can s
 1.	Create a directory where you want to run your composer install, ie : phpwtf_test
 2.	Download the composer.phar into your phpwtf_test folder
 3.	Create a composer.json file in the phpwtf_test folder like : <br/>
-	`{
+	<pre><code>{
 		"name": "nameOfYourProject",
 		"minimum-stability": "dev",
 		"require": {
 			"php": ">=5.3.3",
 			"phpwtf/phpwtf": "dev-master"
 		}
-	}`
+	}</code></pre>
 4.	Then, still from the phpwtf_test folder, run this command line : php composer.phar install
 	
 Usage
