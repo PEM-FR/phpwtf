@@ -40,19 +40,14 @@ Usage
 
 To run the example, you just need to :
 
-1. Clean the reports directory (since composer does not retain permissions on files yet, they will not be overriden as they would normally be by the script). 
-You only have to delete the content of this directory the first time.
-
-2. Go to where you installed phpwtf, in the root folder then type in your console :
-
-	php vendor/bin/phpwtf review --paths="./examples/*.php,./examples/*.js,./examples/*.html" -r --format=html --output-path="./reports/"
-
+1. Go to where you installed phpwtf, in the root folder then type in your console :<br/>
+	<pre><code>php vendor/bin/phpwtf review --paths="./vendor/phpwtf/phpwtf/examples/*.php,./vendor/phpwtf/phpwtf/examples/*.js,./vendor/phpwtf/phpwtf/examples/*.html" -r --format=html --output-path="../reports/"</code></pre>
+2. Now you should see in your root folder, a reports directory with the html reports
 
 Of course phptwtf script supports help command
 
-Args can be written like that :
-
-	php vendor/bin/phpwtf.php review --paths="path/*.php,path/*.js" --format=html --output-path="./reports/" -r -b
+Args can be written like that :<br/>
+	<pre><code>php vendor/bin/phpwtf.php review --paths="path/*.php,path/*.js" --format=html --output-path="./reports/" -r -b</code></pre>
 
 This list of options is non-exhaustive and can change anytime. You can use the help or list command to have more up to date information at any time. Also note that since they are all options, they can be put in *any* order.
  
