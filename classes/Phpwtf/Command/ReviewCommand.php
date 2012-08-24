@@ -177,7 +177,7 @@ class ReviewCommand extends Command
                     $curPath, 0, strrpos($curPath, "/") + 1
                 ) . "*";
                 $dirs = glob($dirPath, GLOB_ONLYDIR|GLOB_ERR);
-                if ($result === false) {
+                if ($dirs === false) {
                     throw new \Exception(
                         'Error wrong path : ' .
                         'please fix the path(s) and try again.'
