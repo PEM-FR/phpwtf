@@ -34,6 +34,8 @@ Basically you need to (<strong>if you already know how to use composer you can s
 		}
 	}</code></pre>
 4.	Then, still from the phpwtf_test folder, run this command line : php composer.phar install
+5. Verify that in the root folder (in our example phpwtf_test) you have a composer.lock file and a vendor directory.
+6. Congratulations you have installed phpwtf through composer :)
 
 
 Usage
