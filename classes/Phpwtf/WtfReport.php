@@ -101,15 +101,13 @@ class WtfReport
             $outputPath .= '/';
         }
 
-        $rootPath = substr($outputPath, 0, 3);
+        $rootPath = substr($outputPath, 0, 2);
         // is the path given relative?
-        if ('../' == $rootPath
-            || '/..' == $rootPath
-            || './.' == $rootPath) {
+        if ('..' == $rootPath
+            || '/.' == $rootPath
+            || './' == $rootPath) {
             // the user has input a relative path, we start from vendor
             $outputPath = $this->_rootPath . $outputPath;
-        } else {
-            $outputPath = $this->_wtfRoot . $outputPath;
         }
 
         if (!is_dir($outputPath)) {

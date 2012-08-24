@@ -18,25 +18,25 @@ Ideally we could even make it usable by Jenkins with a nice graph and code explo
 Installation
 ------------
 
-/!\ THIS TOOL IS TO BE INSTALLED WITH COMPOSER : https://github.com/composer/composer
+/!\ THIS TOOL IS TO BE INSTALLED WITH COMPOSER : <https://github.com/composer/composer>
 
-Basically you need to (if you already know how to use composer you can skip this part) :
+Basically you need to (<strong>if you already know how to use composer you can skip this part</strong>) :
 
-1.	Create a directory where you want to put the tool
-2.	Download the composer.phar
-3.	Create a composer.json file like : 
-	{
+1.	Create a directory where you want to run your composer install, ie : phpwtf_test
+2.	Download the composer.phar into your phpwtf_test folder
+3.	Create a composer.json file in the phpwtf_test folder like : <br/>
+	`{
 		"name": "nameOfYourProject",
 		"minimum-stability": "dev",
 		"require": {
 			"php": ">=5.3.3",
 			"phpwtf/phpwtf": "dev-master"
 		}
-	}
-4.	Then in the command line run : php composer.phar install
+	}`
+4.	Then, still from the phpwtf_test folder, run this command line : php composer.phar install
 	
-Run it!
--------
+Usage
+-----
 
 To run the example, you just need to :
 
