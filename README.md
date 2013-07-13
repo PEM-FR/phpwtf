@@ -30,7 +30,7 @@ Basically you need to (<strong>if you already know how to use composer you can s
 		"minimum-stability": "dev",
 		"require": {
 			"php": ">=5.3.3",
-			"phpwtf/phpwtf": "dev-master"
+			"pem-fr/phpwtf": "dev-master"
 		}
 	}</code></pre>
 4.	Then, still from the phpwtf_test folder, run this command line : php composer.phar install
