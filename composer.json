@@ -1,5 +1,5 @@
 {
-	"name": "phpwtf/phpwtf",
+	"name": "pem-fr/phpwtf",
 	"description": "This tool allows for silent human code reviews on -any language- source file, with reports usable in jenkins for example.",
 	"authors": [
 		{
