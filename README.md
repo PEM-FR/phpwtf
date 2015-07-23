@@ -4,13 +4,12 @@ phpwtf
 What is it?
 -----------
 
-You know Pdepend, PHPMD? well it's a WTF counter for PHP, usefull for codereviews
+You know Pdepend, PHPMD? well it's a WTF counter for PHP, useful for codereviews
 The concept is simple, when you review some code, if you think :
- - What The Fuck? 
- - What The Fuck is that shit? 
- - Who The Fuck made this? 
+ - WTF!? 
+ - Why? Why? Why!!! 
 
-You simply add a @wtf_start and @wtf_stop as a comment before and after the code that needs fixing.
+You simply add a @wtf_start and @wtf_stop as a comment before and after the code that needs ~explanations or~ fixing.
 PHPWTF will parse the code and report the wtfs it finds.
 Ideally we could even make it usable by Jenkins with a nice graph and code exploration :)
 
@@ -20,7 +19,9 @@ Installation
 
 /!\ THIS TOOL IS TO BE INSTALLED WITH COMPOSER : <https://github.com/composer/composer>
 
-Basically you need to (<strong>if you already know how to use composer you can skip this part</strong>) :
+<strong>if you already know how to use composer you can skip this part and go to Usage section.</strong>
+
+Basically you need to:
 
 1.	Create a directory where you want to run your composer install, ie : phpwtf_test
 2.	Download the composer.phar into your phpwtf_test folder
@@ -74,6 +75,6 @@ This list of options is non-exhaustive and can change anytime. You can use the h
 What more?
 ----------
 
-Accepting contributions :)
+Accepting contributions (jenkins integration, code exploration, graphs, better parsing...) :)
 
 The Logo and favicon are courtesy of David Smith and under MIT Licence of the phpwtf project.
