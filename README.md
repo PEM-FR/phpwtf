@@ -9,7 +9,7 @@ The concept is simple, when you review some code, if you think :
  - WTF!? 
  - Why? Why? Why!!! 
 
-You simply add a @wtf_start and @wtf_stop as a comment before and after the code that needs ~explanations or~ fixing.
+You simply add a @wtf_start and @wtf_stop as a comment before and after the code that needs ~~explanations or~~ fixing.
 PHPWTF will parse the code and report the wtfs it finds.
 Ideally we could even make it usable by Jenkins with a nice graph and code exploration :)
 
