@@ -7,6 +7,8 @@
 
 namespace Phpwtf;
 
+use Phpwtf\Wtf as Wtf;
+
 /**
  * This is a collection class
  * // TODO: check if ArrayCollection from Doctrine Common could work
@@ -50,7 +52,11 @@ class Wtfs
         $wtfs = $this->getWtfs();
         if (!empty($wtfs)) {
             foreach ($wtfs as $wtf) {
-                $xml .= $wtf->toXml();
+                if ($wtf instanceof Wtf) {
+                    $xml .= $wtf->toXml();
+                } else {
+                    throw new Exception('Cannot convert to xml. Object is not an instance of Wtf');
+                }
             }
         }
         return $xml;

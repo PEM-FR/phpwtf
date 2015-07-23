@@ -7,6 +7,8 @@
 
 namespace Phpwtf;
 
+use Phpwtf\WtfSnippet as Snippet;
+
 /**
  * This class is in charge of handling Wtfs found in code
  */
@@ -19,11 +21,8 @@ class Wtf
     private $_file;
 
     /**
-     * An associative array where wtf have been encountered in the file
-     *     line number => array(
-     *         'severity' => severity, 'snippet' => code snippet
-     *     )
-     * @var array
+     * An array of \Phpwtf\WtfSnippet
+     * @var array of \Phpwtf\WtfSnippet
      */
     private $_wtfs;
 
@@ -99,7 +98,7 @@ class Wtf
 
     /**
      * Returns the array of wtf encountered
-     * @return array
+     * @return array of Snippet
      */
     public function getWtfs()
     {
@@ -112,12 +111,15 @@ class Wtf
      * @param string $snippet The code snippet involved
      * @param string $severity OPTIONAL 'error' by default
      */
-    public function addWtf($line, $snippet, $severity = 'error')
+    public function addWtf(Snippet $snippet)
     {
         $wtfs = $this->getWtfs();
-        $this->_wtfs[$line] = array(
-            'severity' => $severity, 'snippet' => $snippet
-        );
+        $identifier = $snippet->getIdentifier();
+        if (empty($wtfs[$identifier])) {
+            $this->_wtfs[$identifier] = $snippet;
+        } else {
+            throw new \Exception('Snippet already reported');
+        }
     }
 
     /**
@@ -129,10 +131,10 @@ class Wtf
         $wtfs = $this->getWtfs();
         $xml = '<file name="' . $this->getReadableFileName() . '">';
         if (!empty($wtfs)){
-            foreach ($wtfs as $line => $wtf) {
-                $xml .= '<error line="' . $line . '" ' .
-                    'severity="' . $wtf['severity'] . '" ' .
-                    'message="' . htmlentities($wtf['snippet']) . '"/>';
+            foreach ($wtfs as $wtf) {
+                $xml .= '<error line="' . $wtf->getLineStart() . '" ' .
+                    'severity="' . $wtf->getSeverity() . '" ' .
+                    'message="' . htmlentities($wtf->getSnippet()) . '"/>';
             }
         }
         $xml .= '</file>';
@@ -159,11 +161,11 @@ class Wtf
 
         // now we make the snippet list
         $snippets = '';
-        foreach ($wtfs as $line => $wtf) {
+        foreach ($wtfs as $wtf) {
             $snippets .= '<div>' .
                 '<div class="lineNb"><span class="label">Line : </span>' .
-                $line . '</div><div class="snippet">' .
-                '<code>' . nl2br($wtf['snippet']) . '</code>' .
+                $wtf->getLineStart() . '</div><div class="snippet">' .
+                '<code>' . nl2br($wtf->getSnippet()) . '</code>' .
                 '</div></div>';
         }
 
