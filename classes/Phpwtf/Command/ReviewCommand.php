@@ -108,9 +108,9 @@ class ReviewCommand extends Command
             // Loop through our array, show HTML source as HTML source;
             // and line numbers too.
             $startFound = false;
-            $endFound = false;
-            $errorMsg = '';
-
+            $endFound   = false;
+            $errorMsg   = '';
+            $lineStart  = 0;
             $wtfsInFile = array();
 
             foreach ($lines as $lineNb => $line) {
