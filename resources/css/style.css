@@ -6,7 +6,7 @@ h1{
 	text-align: center;
 }
 
-nav {
+nav{
 	border-top : 1px solid #33AAFF;
 	border-bottom : 1px solid #33AAFF;
 }
@@ -60,9 +60,9 @@ div.wtfSnippets{
 
 div.wtfSnippets > div{
 	border : 1px solid #000;
-	margin-top : 10px;
 	display : table;
 	margin: auto auto 20px;
+    width:  100%;
 }
 
 div.wtfSnippets div.lineNb,
@@ -83,7 +83,11 @@ div.wtfSnippets div.lineNb{
 div.wtfSnippets div.snippet{
 	border-left : 1px solid #000;
 	width		: 810px;
-	padding-left : 10px;
+}
+
+div.snippet > pre {
+    margin: 0;
+    padding: 0;
 }
 
 table.wtfFileList{
@@ -105,7 +109,7 @@ table.wtfFileList th
 }
 
 table.wtfFileList th{
-	background-color: none;
+	background-color: transparent;
 }
 
 .axis path, .axis line {

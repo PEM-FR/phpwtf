@@ -85,7 +85,6 @@ class ReviewCommand extends Command
         // let's have fun finding all the files to parse
         $files = array();
         $found = false;
-        $errors = '';
         $this->_getFiles(
             $input->getOption('paths'), $files, $input->getOption('recursive')
         );
@@ -121,7 +120,7 @@ class ReviewCommand extends Command
                 } elseif($wtfStart !== false && !!$startFound) {
                     // we found a @wtf_start inside another @wtf_start snippet
                     // we do not support nested wtfs, come on...
-                    $snippet = new Snippet($wtfStart . '-noEnd');
+                    $snippet = new Snippet($lineStart . '-noEnd');
                     $snippet->setLineStart($lineStart);
                     $snippet->setSeverity('error');
                     $snippet->setSnippet(
@@ -147,7 +146,6 @@ class ReviewCommand extends Command
                     $found = true;
                     if ($endFound) {
                         $snippet = new Snippet($lineStart . '-' . $lineNb);
-                        $snippet->setIdentifier();
                         $snippet->setLineStart($lineStart);
                         $snippet->setLineStop($lineNb);
                         $snippet->setSeverity('error');
@@ -163,13 +161,12 @@ class ReviewCommand extends Command
                 // wtf_start without a wtf_stop.
                 // Rather than reporting the whole file, we will trigger an
                 // exception or just report the line where the wtf_start was if skip-error option was set.
-                $startFound = false;
                 $message = 'A @wtf_start has been found without a matching @wtf_stop in ' .
-                    $file . ' at line ' . $lineNb;
+                    $file . ' at line ' . $lineStart;
                 if (!$input->getOption('skip-error')) {
                     throw new \Exception($message);
                 } else {
-                    $snippet = new Snippet($wtfStart . '-noEnd');
+                    $snippet = new Snippet($lineStart . '-noEnd');
                     $snippet->setLineStart($lineStart);
                     $snippet->setSeverity('error');
                     $snippet->setSnippet(
@@ -180,7 +177,11 @@ class ReviewCommand extends Command
                 }
             }
             if ($found) {
-                $wtfs->addWtf(new Wtf(array('file' => $file, 'wtfs' => $wtfsInFile)));
+                $wtfs->addWtf(
+                    new Wtf(
+                        array('file' => $file, 'wtfsnippets' => $wtfsInFile)
+                    )
+                );
                 $found = false;
             }
         }
@@ -218,7 +219,7 @@ class ReviewCommand extends Command
                 $dirs = glob($dirPath, GLOB_ONLYDIR|GLOB_ERR);
                 if ($dirs === false) {
                     throw new \Exception(
-                        'Error wrong path : ' .
+                        'Error wrong path : ' . $dirPath . ' --- ' .
                         'please fix the path(s) and try again.'
                     );
                 }
@@ -233,7 +234,7 @@ class ReviewCommand extends Command
                 $files = array_merge($files, $result);
             } else {
                 throw new \Exception(
-                    'Error wrong path : please fix the path(s) and try again.'
+                    'Error wrong path : ' . $curPath . ' --- please fix the path(s) and try again.'
                 );
             }
         }
@@ -264,5 +265,4 @@ class ReviewCommand extends Command
             '<info>----------------------------------------------------</info>'
         );
     }
-}
 }
