@@ -69,8 +69,8 @@ div.wtfSnippets div.lineNb,
 div.wtfSnippets div.snippet
 {
 	float: left;
-	top : 0px;
-	left : 0px;
+	top : 0;
+	left : 0;
 }
 
 div.wtfSnippets div.lineNb{
