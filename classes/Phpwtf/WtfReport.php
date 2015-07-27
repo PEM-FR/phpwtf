@@ -119,8 +119,8 @@ class WtfReport
 
     /**
      * Used to generate the report(s)
-     * @param Wtfs $wtfs OPTIONAL
-     * @throws Exception
+     * @param \Phpwtf\Wtfs $wtfs OPTIONAL
+     * @throws \Exception
      */
     public function generateReport(Wtfs $wtfs = null)
     {
@@ -130,9 +130,8 @@ class WtfReport
             } else {
                 throw new \Exception('No Wtf list to use !');
             }
-        } else {
-            $this->_wtfs = $wtfs;
         }
+        $this->_wtfs = $wtfs;
 
         // in case of output format combination like xml+stats
         $formats = explode('+', $this->_format);
@@ -170,6 +169,7 @@ class WtfReport
 
     /**
      * Used to generate the charts data in json
+     * @throws \Exception
      * @return void
      */
     private function _createStats()
@@ -188,12 +188,14 @@ class WtfReport
         $wtfsList = $wtfs->getWtfs();
         $totalWtfs = 0;
         foreach ($wtfsList as $wtf) {
-            $file = $this->_getSplInfo($wtf->getFile());
-            $nbWtfs = count($wtf->getWtfs());
-            $this->_stats['wtfs'][] = array(
-                'file' => $file->getRealPath(), 'total' => $nbWtfs
-            );
-            $totalWtfs += $nbWtfs;
+            if ($wtf instanceof Wtf) {
+                $file = $this->_getSplInfo($wtf->getFile());
+                $nbWtfs = count($wtf->getWtfSnippets());
+                $this->_stats['wtfs'][] = array(
+                    'file' => $file->getRealPath(), 'total' => $nbWtfs
+                );
+                $totalWtfs += $nbWtfs;
+            }
         }
         $this->_stats['total'] = $totalWtfs;
         // now we write the stats
@@ -291,29 +293,31 @@ class WtfReport
 
         $totalWtfs = 0;
         foreach ($wtfsList as $wtf) {
-            $file = $this->_getSplInfo($wtf->getFile());
+            if ($wtf instanceof Wtf) {
+                $file = $this->_getSplInfo($wtf->getFile());
 
-            // we keep the extension in case of the user having several files
-            // with the same name : example.php, example.js, example.java
-            // we also need to have a unique id in case the user having files
-            // with identical names but in different folders
-            $fileName = substr(
-                sha1(microtime() . '_' . $file->getFilename()), 0, 9
-            );
-            $fileName = $fileName . '_' . $file->getFilename() . '.html';
-            $this->_createFile(
-                $this->_outputPath . $fileName, $wtf->toHtml($wtfFileTemplate)
-            );
-            $nbWtfs = count($wtf->getWtfs());
-            $indexOfFiles[$file->getRealPath()] = array(
-                'reportFile' => './' . $fileName,
-                'wtfsNb' => $nbWtfs
-            );
-            $this->_stats['wtfs'][] = array(
-                'file' => $file->getRealPath(), 'total' => $nbWtfs
-            );
+                // we keep the extension in case of the user having several files
+                // with the same name : example.php, example.js, example.java
+                // we also need to have a unique id in case the user having files
+                // with identical names but in different folders
+                $fileName = substr(
+                    sha1(microtime() . '_' . $file->getFilename()), 0, 9
+                );
+                $fileName = $fileName . '_' . $file->getFilename() . '.html';
+                $this->_createFile(
+                    $this->_outputPath . $fileName, $wtf->toHtml($wtfFileTemplate)
+                );
+                $nbWtfs = count($wtf->getWtfSnippets());
+                $indexOfFiles[$file->getRealPath()] = array(
+                    'reportFile' => './' . $fileName,
+                    'wtfsNb' => $nbWtfs
+                );
+                $this->_stats['wtfs'][] = array(
+                    'file' => $file->getRealPath(), 'total' => $nbWtfs
+                );
 
-            $totalWtfs += $nbWtfs;
+                $totalWtfs += $nbWtfs;
+            }
         }
 
         $this->_stats['total'] = $totalWtfs;
@@ -343,7 +347,7 @@ class WtfReport
      * @param string $outputFile Path to the output file
      * @param string $output Content to be written to the file
      * @param bool $append Should the content be appeneded or the file replaced
-     * @throws Exception
+     * @throws \Exception
      */
     private function _createFile($outputFile, $output, $append = false)
     {
@@ -361,7 +365,7 @@ class WtfReport
     /**
      * This function returns an SplInfo object for a given file
      * @param string $filePath
-     * @return SplFileInfo
+     * @return \SplFileInfo
      */
     private function _getSplInfo($filePath)
     {
@@ -371,22 +375,22 @@ class WtfReport
     /**
      * Sync dirs - non recursive as of now
      * @param string $src
-     * @param string $dest
+     * @param string $destination
      */
-    private function _rsyncDirs($src, $dest)
+    private function _rsyncDirs($src, $destination)
     {
-        if (!is_dir($dest)) {
-            mkdir($dest, 0755);
+        if (!is_dir($destination)) {
+            mkdir($destination, 0755);
         }
 
         $iterator = new \DirectoryIterator($src);
         foreach ($iterator as $fileinfo) {
-            if ($fileinfo->isFile()) {
+            if ($fileinfo instanceof \SplFileInfo && $fileinfo->isFile()) {
                 // only copy if file does not exist
-                if (!is_file($dest . '/' . $fileinfo->getFilename())) {
+                if (!is_file($destination . '/' . $fileinfo->getFilename())) {
                     copy(
                         $fileinfo->getRealPath(),
-                        $dest . '/' . $fileinfo->getFilename()
+                        $destination . '/' . $fileinfo->getFilename()
                     );
                 }
             }

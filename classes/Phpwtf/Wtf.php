@@ -7,6 +7,8 @@
 
 namespace Phpwtf;
 
+use Phpwtf\WtfSnippet as Snippet;
+
 /**
  * This class is in charge of handling Wtfs found in code
  */
@@ -19,13 +21,10 @@ class Wtf
     private $_file;
 
     /**
-     * An associative array where wtf have been encountered in the file
-     *     line number => array(
-     *         'severity' => severity, 'snippet' => code snippet
-     *     )
-     * @var array
+     * An array of \Phpwtf\WtfSnippet
+     * @var array of \Phpwtf\WtfSnippet
      */
-    private $_wtfs;
+    private $_wtfSnippets;
 
     /**
      * The root path can be either vendor if installed with composer
@@ -35,29 +34,21 @@ class Wtf
 
     /**
      * Constructor with data injection
-     * @param $wtfArray An array of data usable by the object
-     *         array(
-     *             'file' => filepath,
-     *             'wtfs' => array(
-     *                 lineNb => array(
-     *                     'severity' => severity,
-     *                     'snippet' => snippet
-     *                 ),
-     *             )
-     *         )
-     * @throws Exception
+     * @param mixed $wtfArray
+     * @throws \Exception
      */
     public function __construct($wtfArray)
     {
+        // $wtfArray like array('file' => filepath,'wtfs' => array(WtfSnippet,))
         if (!empty($wtfArray['file'])) {
             $this->_file = $wtfArray['file'];
         } else {
             throw new \Exception('No file path specified !');
         }
-        if (!empty($wtfArray['wtfs'])) {
-            $this->_wtfs = $wtfArray['wtfs'];
+        if (!empty($wtfArray['wtfsnippets'])) {
+            $this->_wtfSnippets = $wtfArray['wtfsnippets'];
         } else {
-            $this->_wtfs = array();
+            $this->_wtfSnippets = array();
         }
 
         $this->_rootPath = __DIR__ . '/../../';
@@ -78,7 +69,7 @@ class Wtf
     /**
      * This function returns an SplInfo object for a given file
      * @param string $filePath
-     * @return SplFileInfo
+     * @return \SplFileInfo
      */
     private function _getSplInfo($filePath)
     {
@@ -98,26 +89,28 @@ class Wtf
     }
 
     /**
-     * Returns the array of wtf encountered
-     * @return array
+     * Returns the array of wtf snippets encountered
+     * @return mixed of \Phpwtf\WtfSnippet
      */
-    public function getWtfs()
+    public function getWtfSnippets()
     {
-        return $this->_wtfs;
+        return $this->_wtfSnippets;
     }
 
     /**
      * Add a wtf to the wtf list
-     * @param int $line The line number where the wtf has been found
-     * @param string $snippet The code snippet involved
-     * @param string $severity OPTIONAL 'error' by default
+     * @param \Phpwtf\WtfSnippet $snippet
+     * @throws \Exception
      */
-    public function addWtf($line, $snippet, $severity = 'error')
+    public function addWtfSnippet(Snippet $snippet)
     {
-        $wtfs = $this->getWtfs();
-        $this->_wtfs[$line] = array(
-            'severity' => $severity, 'snippet' => $snippet
-        );
+        $wtfs = $this->getWtfSnippets();
+        $identifier = $snippet->getIdentifier();
+        if (empty($wtfs[$identifier])) {
+            $this->_wtfSnippets[$identifier] = $snippet;
+        } else {
+            throw new \Exception('Snippet already reported');
+        }
     }
 
     /**
@@ -126,13 +119,15 @@ class Wtf
      */
     public function toXml()
     {
-        $wtfs = $this->getWtfs();
+        $wtfs = $this->getWtfSnippets();
         $xml = '<file name="' . $this->getReadableFileName() . '">';
         if (!empty($wtfs)){
-            foreach ($wtfs as $line => $wtf) {
-                $xml .= '<error line="' . $line . '" ' .
-                    'severity="' . $wtf['severity'] . '" ' .
-                    'message="' . htmlentities($wtf['snippet']) . '"/>';
+            foreach ($wtfs as $wtf) {
+                if ($wtf instanceof Snippet) {
+                    $xml .= '<error line="' . $wtf->getLineStart() . '" ' .
+                        'severity="' . $wtf->getSeverity() . '" ' .
+                        'message="' . htmlentities($wtf->getSnippet()) . '"/>';
+                }
             }
         }
         $xml .= '</file>';
@@ -141,30 +136,36 @@ class Wtf
 
     /**
      * Used to create a html report for the current file
-     * @params string $template
+     * @param string $template
      * @returns string Html
      */
     public function toHtml($template)
     {
-        $html = $template;
-        $wtfs = $this->getWtfs();
+        $html = (string) $template;
+        $wtfs = $this->getWtfSnippets();
+        $filename = $this->getReadableFileName();
         // replace vars by values, then return new updated html string
         $html = str_replace(
             array('${fileName}', '${wtfsNb}', '${lastModified}'),
-            array(
-                $this->getReadableFileName(), count($wtfs), date('Y-m-d H:i:s')
-            ),
+            array($filename, count($wtfs), date('Y-m-d H:i:s')),
             $html
         );
 
         // now we make the snippet list
         $snippets = '';
-        foreach ($wtfs as $line => $wtf) {
-            $snippets .= '<div>' .
-                '<div class="lineNb"><span class="label">Line : </span>' .
-                $line . '</div><div class="snippet">' .
-                '<code>' . nl2br($wtf['snippet']) . '</code>' .
-                '</div></div>';
+        $fileExtension = substr($filename, (strrpos($filename, '.') + 1), strlen($filename));
+        $html .= '<!-- file ext : ' . $fileExtension . ' //// filename : ' . $filename . ' -->';
+        foreach ($wtfs as $wtf) {
+            if ($wtf instanceof Snippet) {
+                $snippets .= '<div>' .
+                    '<div class="lineNb"><span class="label">Line : </span>' .
+                    $wtf->getLineStart() . '</div><div class="snippet">'
+                ;
+                $snippets .= '<pre><code class="' . $fileExtension . '">' .
+                    ('html' === $fileExtension ? htmlentities($wtf->getSnippet()) : $wtf->getSnippet()) .
+                    '</code></pre></div></div>'
+                ;
+            }
         }
 
         $html = str_replace('${snippets}', $snippets, $html);

@@ -8,6 +8,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Phpwtf\WtfSnippet as Snippet;
+use Phpwtf\Wtfs as Wtfs;
+use Phpwtf\Wtf as Wtf;
+use Phpwtf\WtfReport as Report;
+
 class ReviewCommand extends Command
 {
     private $_rootPath;
@@ -22,7 +27,7 @@ class ReviewCommand extends Command
             )
             ->addOption(
                 'paths',
-                null,
+                '-p',
                 InputOption::VALUE_REQUIRED,
                 'Paths to scan for sources, ' .
                 'ie: "/some/path/*.php,/some/other/path/*.js"' .
@@ -33,7 +38,7 @@ class ReviewCommand extends Command
             )
             ->addOption(
                 'output-path',
-                null,
+                '-o',
                 InputOption::VALUE_REQUIRED,
                 'The directory where the reports should be written to.' .
                 'Default to "./reports/"',
@@ -41,7 +46,7 @@ class ReviewCommand extends Command
             )
             ->addOption(
                 'format',
-                null,
+                '-f',
                 InputOption::VALUE_REQUIRED,
                 'The format of the reports, ie: xml, html, stats, xml+stats.' .
                 'Note that html already includes the stats. Default to xml',
@@ -52,6 +57,12 @@ class ReviewCommand extends Command
                 '-r',
                 InputOption::VALUE_NONE,
                 'If set, the paths will be scanned recursively.'
+            )
+            ->addOption(
+                'skip-error',
+                '-s',
+                InputOption::VALUE_NONE,
+                'If set, errors will not stop the execution of the script.'
             )
             ->addOption(
                 'bench',
@@ -74,17 +85,16 @@ class ReviewCommand extends Command
         // let's have fun finding all the files to parse
         $files = array();
         $found = false;
-        $errors = '';
         $this->_getFiles(
             $input->getOption('paths'), $files, $input->getOption('recursive')
         );
 
-        $wtfs = new \Phpwtf\Wtfs();
+        $wtfs = new Wtfs();
         $params = array(
             'outputPath' => $input->getOption('output-path'),
             'format' => $input->getOption('format'),
         );
-        $report = new \Phpwtf\WtfReport($params);
+        $report = new Report($params);
 
         // foreach file we should check if it is an amd one, if so,
         // get the dependency list, and check the code.
@@ -97,20 +107,38 @@ class ReviewCommand extends Command
             // Loop through our array, show HTML source as HTML source;
             // and line numbers too.
             $startFound = false;
-            $endFound = false;
-            $errorMsg = '';
-
+            $endFound   = false;
+            $errorMsg   = '';
+            $lineStart  = 1;
             $wtfsInFile = array();
 
             foreach ($lines as $lineNb => $line) {
                 $wtfStart = stripos($line, '@wtf_start');
-                if ($wtfStart !== false) {
+                $displayLine = ($lineNb + 1);
+                if ($wtfStart !== false && !$startFound) {
+                    $lineStart  = $displayLine; // lines start with 1, not 0
+                    $startFound = true;
+                } elseif($wtfStart !== false && !!$startFound) {
+                    // we found a @wtf_start inside another @wtf_start snippet
+                    // we do not support nested wtfs, come on...
+                    $snippet = new Snippet($lineStart . '-noEnd');
+                    $snippet->setLineStart($lineStart);
+                    $snippet->setSeverity('error');
+                    $snippet->setSnippet(
+                        'A @wtf_start has been found without a matching @wtf_stop in ' .
+                        $file . ' at line ' . $lineStart
+                    );
+                    $wtfsInFile[$lineStart] = $snippet;
+                    $found = true;
+
+                    // proceed to the next snippet directly
+                    $lineStart  = $displayLine;
                     $startFound = true;
                 }
 
                 $wtfEnd = stripos($line, '@wtf_stop');
                 if ($wtfEnd !== false) {
-                    $endFound = true;
+                    $endFound   = true;
                     $startFound = false;
                 }
 
@@ -118,9 +146,12 @@ class ReviewCommand extends Command
                     $errorMsg .= $line;
                     $found = true;
                     if ($endFound) {
-                        $wtfsInFile[$lineNb] = array(
-                            'severity' => 'error', 'snippet' => $errorMsg
-                        );
+                        $snippet = new Snippet($lineStart . '-' . $displayLine);
+                        $snippet->setLineStart($lineStart);
+                        $snippet->setLineStop($displayLine);
+                        $snippet->setSeverity('error');
+                        $snippet->setSnippet($errorMsg);
+                        $wtfsInFile[$displayLine] = $snippet;
                         $endFound = false;
                         $errorMsg = '';
                     }
@@ -130,16 +161,26 @@ class ReviewCommand extends Command
                 // we have a problem here, it means that someone has put a
                 // wtf_start without a wtf_stop.
                 // Rather than reporting the whole file, we will trigger an
-                // exception.
-                $startFound = false;
-                throw new \Exception(
-                    'A @wtf_start has been found without a matching @wtf_stop!'
-                );
+                // exception or just report the line where the wtf_start was if skip-error option was set.
+                $message = 'A @wtf_start has been found without a matching @wtf_stop in ' .
+                    $file . ' at line ' . $lineStart;
+                if (!$input->getOption('skip-error')) {
+                    throw new \Exception($message);
+                } else {
+                    $snippet = new Snippet($lineStart . '-noEnd');
+                    $snippet->setLineStart($lineStart);
+                    $snippet->setSeverity('error');
+                    $snippet->setSnippet(
+                        'A @wtf_start has been found without a matching @wtf_stop in ' .
+                        $file . ' at line ' . $lineStart
+                    );
+                    $wtfsInFile[$lineStart] = $snippet;
+                }
             }
             if ($found) {
                 $wtfs->addWtf(
-                    new \Phpwtf\Wtf(
-                        array('file' => $file, 'wtfs' => $wtfsInFile)
+                    new Wtf(
+                        array('file' => $file, 'wtfsnippets' => $wtfsInFile)
                     )
                 );
                 $found = false;
@@ -179,7 +220,7 @@ class ReviewCommand extends Command
                 $dirs = glob($dirPath, GLOB_ONLYDIR|GLOB_ERR);
                 if ($dirs === false) {
                     throw new \Exception(
-                        'Error wrong path : ' .
+                        'Error wrong path : ' . $dirPath . ' --- ' .
                         'please fix the path(s) and try again.'
                     );
                 }
@@ -194,7 +235,7 @@ class ReviewCommand extends Command
                 $files = array_merge($files, $result);
             } else {
                 throw new \Exception(
-                    'Error wrong path : please fix the path(s) and try again.'
+                    'Error wrong path : ' . $curPath . ' --- please fix the path(s) and try again.'
                 );
             }
         }

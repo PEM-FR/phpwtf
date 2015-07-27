@@ -42,6 +42,7 @@ class Wtfs
 
     /**
      * Used to generate the output of the wtfs objects to an xml string
+     * @throws \Exception
      * @return string XML
      */
     public function toXml()
@@ -50,7 +51,11 @@ class Wtfs
         $wtfs = $this->getWtfs();
         if (!empty($wtfs)) {
             foreach ($wtfs as $wtf) {
-                $xml .= $wtf->toXml();
+                if ($wtf instanceof Wtf) {
+                    $xml .= $wtf->toXml();
+                } else {
+                    throw new \Exception('Cannot convert to xml. Object is not an instance of Wtf');
+                }
             }
         }
         return $xml;
