@@ -62,7 +62,6 @@ div.wtfSnippets > div{
 	border : 1px solid #000;
 	display : table;
 	margin: auto auto 20px;
-    width:  100%;
 }
 
 div.wtfSnippets div.lineNb,
