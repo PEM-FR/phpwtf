@@ -162,7 +162,8 @@ class Wtf
                     $wtf->getLineStart() . '</div><div class="snippet">'
                 ;
                 $snippets .= '<pre><code class="' . $fileExtension . '">' .
-                    $wtf->getSnippet() . '</code></pre></div></div>'
+                    ('html' === $fileExtension ? htmlentities($wtf->getSnippet()) : $wtf->getSnippet()) .
+                    '</code></pre></div></div>'
                 ;
             }
         }

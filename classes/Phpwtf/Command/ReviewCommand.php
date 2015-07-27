@@ -109,13 +109,14 @@ class ReviewCommand extends Command
             $startFound = false;
             $endFound   = false;
             $errorMsg   = '';
-            $lineStart  = 0;
+            $lineStart  = 1;
             $wtfsInFile = array();
 
             foreach ($lines as $lineNb => $line) {
                 $wtfStart = stripos($line, '@wtf_start');
+                $displayLine = ($lineNb + 1);
                 if ($wtfStart !== false && !$startFound) {
-                    $lineStart  = $lineNb;
+                    $lineStart  = $displayLine; // lines start with 1, not 0
                     $startFound = true;
                 } elseif($wtfStart !== false && !!$startFound) {
                     // we found a @wtf_start inside another @wtf_start snippet
@@ -131,7 +132,7 @@ class ReviewCommand extends Command
                     $found = true;
 
                     // proceed to the next snippet directly
-                    $lineStart  = $lineNb;
+                    $lineStart  = $displayLine;
                     $startFound = true;
                 }
 
@@ -145,12 +146,12 @@ class ReviewCommand extends Command
                     $errorMsg .= $line;
                     $found = true;
                     if ($endFound) {
-                        $snippet = new Snippet($lineStart . '-' . $lineNb);
+                        $snippet = new Snippet($lineStart . '-' . $displayLine);
                         $snippet->setLineStart($lineStart);
-                        $snippet->setLineStop($lineNb);
+                        $snippet->setLineStop($displayLine);
                         $snippet->setSeverity('error');
                         $snippet->setSnippet($errorMsg);
-                        $wtfsInFile[$lineNb] = $snippet;
+                        $wtfsInFile[$displayLine] = $snippet;
                         $endFound = false;
                         $errorMsg = '';
                     }
