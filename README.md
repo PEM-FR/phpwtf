@@ -55,9 +55,13 @@ Args can be written like that :<br/>
 
 This list of options is non-exhaustive and can change anytime. You can use the help or list command to have more up to date information at any time. Also note that since they are all options, they can be put in *any* order.
  
-    --paths         -p      parameters given to a path function
+    --input-path    -p      Paths to scan for sources, 
+                                ie: "/some/path/*.php,/some/other/path/*.js"
+                                Default to "/". Becareful, relative path are resolved 
+                                from either vendor folder or root folder if you 
+                                have not installed phpwtf with composer.
 
-    --recursive     -r      if not set then false
+    --recursive     -r      If set, the paths will be scanned recursively. Defaults to *FALSE*
 
     --format        -f      by default xml, can be set to html, html+stats, xml+stats
                                 the xml is a simple xml with files, and errors
