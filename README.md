@@ -55,23 +55,23 @@ Args can be written like that :<br/>
 
 This list of options is non-exhaustive and can change anytime. You can use the help or list command to have more up to date information at any time. Also note that since they are all options, they can be put in *any* order.
  
-	--paths         -p	parameters given to a path function
+    --paths         -p      parameters given to a path function
 
-	--recursive 	-r  	if not set then false
+    --recursive     -r      if not set then false
 
-	--format        -f	by default xml, can be set to html, html+stats, xml+stats
-					the xml is a simple xml with files, and errors
-					the html is a set of pages per file, with the errors
-					reported + stats stats will just ouput statistics
-					about the nb of WTF, etc
-					finally you can combine output format by using +
+    --format        -f      by default xml, can be set to html, html+stats, xml+stats
+                                the xml is a simple xml with files, and errors
+                                the html is a set of pages per file, with the errors
+                                reported + stats stats will just ouput statistics
+                                about the nb of WTF, etc
+                                finally you can combine output format by using "+"
 
-	--output-path 	-o  	defaults to ./reports/
-					the directory where you want your reports to be written
+    --output-path   -o      defaults to ./reports/
+                                the directory where you want your reports to be written
 	
-	--skip-error 	-s	if set, errors will not stop the parsing.
+    --skip-error    -s      if set, errors will not stop the parsing.
 
-	--bench    	-b   	To display timings.
+    --bench         -b      To display timings.
 
 
 What more?
