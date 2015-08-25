@@ -26,7 +26,7 @@ class ReviewCommand extends Command
                 'report them in a given format.'
             )
             ->addOption(
-                'paths',
+                'input-path',
                 '-p',
                 InputOption::VALUE_REQUIRED,
                 'Paths to scan for sources, ' .
@@ -86,7 +86,7 @@ class ReviewCommand extends Command
         $files = array();
         $found = false;
         $this->_getFiles(
-            $input->getOption('paths'), $files, $input->getOption('recursive')
+            $input->getOption('input-path'), $files, $input->getOption('recursive')
         );
 
         $wtfs = new Wtfs();
